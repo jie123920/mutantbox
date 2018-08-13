@@ -1,0 +1,10 @@
+.container .service_list th,.header_con .nav a,.game_commanders .tit_hd li,.game_binzhong .arms_class_r,.footer .nav li a ,#servicedetail .nav-tabs>li>a{
+    font-family: "Cambria" !important;
+}
+.log_share_lang .log_in .header_msg_box li i{
+    right:10px !important;
+}
+.header_msg_box li a{
+    text-indent: 10px!important;
+    font-size: 12px!important;
+}

@@ -1,0 +1,50 @@
+<?php
+use yii\widgets\LinkPager;
+?>
+<div class="container no-banner" id="newslist_n">
+	<div class="row items-container newslist">
+        <?php
+             $i=1;
+             $imagePath = __IMG__;
+             $style[1] = $imagePath.'/news/bg1.png';
+             $style[2] = $imagePath.'/news/bg2.png';
+             $style[3] = $imagePath.'/news/bg3.png';
+        ?>
+	<?php foreach($articlerList as $data){?>
+        <?php
+         if($i>3){
+                $i=1;
+            }
+        ?>
+	<div class="col-sm-12 item " style="background-image: url('<?=$style[$i]?>')" >
+            <?php
+                $name = strtolower($data['name']);
+                switch ($name) {
+                case 'events':
+                case 'strategy':
+                    $color = "#fff888";
+                    break;
+
+                case 'announcement':
+                case 'tutorial':
+                    $color = "#00b4ff";
+                    break;
+
+                default:
+                    $color = "#79e444";
+                    break;
+                }
+            ?>
+        <h1><a href="/news?fid=<?=$data['fid']?>" class="event pull-right" style="color: <?=$color?>"><?=$data['name']?></a><a style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 85%;display: inline-block;" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></h1>
+			<dl> <?=$data['description']?></dl>
+            <dl><a href="/news/<?=$data['id']?>/<?=$data['urltitle']?>">Read More</a><font><?=date('Y m d', $data['create_time']);?> [GMT]</font></dl>
+		</div>
+        <?php $i++;?>
+	<?php }?>
+	</div>
+    <div class="page_box">
+      <div class="g_page">
+          <?= LinkPager::widget(['pagination' => $page]); ?>
+      </div>
+    </div>
+</div>

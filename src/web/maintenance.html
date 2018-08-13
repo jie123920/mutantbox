@@ -1,0 +1,33 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.mutantbox.com/00/03/Home/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.mutantbox.com/00/03/Home/css/base.css">
+</head>
+<body>
+
+    <div class="content">
+        <div class="box_maintain">
+            <div class="img_maintain">
+                <img src="https://cdn.mutantbox.com/00/03/Home/images/maintain.png">
+            </div>
+            <div class="con_maintain">
+                <h2>Maintenance in progress</h2>
+                <h3>Mutantbox is currently down and scheduled for <br>maintenance and upgrades.</h3>
+                <!--<h3>Maintenance is planned to end on <br><span id="date"></span> at <span id="time"></span></h3>-->
+                <h3>Thank you for waiting</h3>
+                <p>In the meantime, you can visit our facebook here:</p>
+                <p><a href="https://www.facebook.com/LiberatorsGame/" target="_blank">https://www.facebook.com/LiberatorsGame/</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        var dateObj = new Date(1481788800000);
+        var date = dateObj.getDate() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getFullYear(); 
+        var time = ('0' + dateObj.getHours()).substring(('0' + dateObj.getHours()).length-2, ('0' + dateObj.getHours()).length) + ':' + ('0' + dateObj.getMinutes()).substring(('0' + dateObj.getMinutes()).length-2, ('0' + dateObj.getMinutes()).length);
+        document.getElementById('date').innerHTML = date;
+        document.getElementById('time').innerHTML = time;
+    </script>
+</body>
+</html>

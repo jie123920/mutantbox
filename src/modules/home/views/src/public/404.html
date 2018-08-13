@@ -1,0 +1,18 @@
+<div class="content">
+	<div class="box_404">
+        <div class="img_404">
+            <img src="<?=__IMG__?>/404_img.png">
+        </div>
+    	<div class="con_404">
+            <h2><?=\YII::t('common','404ops')?></h2>
+            <?php if(isset($title)){?>
+                <h3><?=$title?></h3>
+            <?php }else{?>
+                <h3><?=\YII::t('common','404error')?></h3>
+            <?php }?>
+            <h3><?=\YII::t('common','404reason')?></h3>
+            <h4><?=\YII::t('common','404gotoOne')?></h4>
+            <h4><?=\YII::t('common','404gotoTwo')?></h4>
+        </div>
+    </div>
+</div>

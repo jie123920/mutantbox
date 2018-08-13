@@ -1,0 +1,214 @@
+<script type="text/javascript">
+    var upload_portra_url = "/usercenter/uploadportrait";
+    var crop_portra_url = "/usercenter/cropportrait";
+    var save_portra_url = "/usercenter/ajaxsaveportrait";
+    var domain = '<?php echo $_SERVER['HTTP_HOST'];?>';
+</script>
+    <link rel="stylesheet" type="text/css" href="<?=__CSS__?>/service.css">
+    <style>
+        .text p img{
+            width: 80%;
+        }
+        .system .text p{
+            word-break: break-all;
+        }
+    </style>
+    <div class="service_main">
+        <div class="search_box" style="margin-bottom: 50px;">
+            <div class="select">
+                <select name="game_id">
+                    <?php foreach($game_list as $vo){?>
+                    <option value="<?=$vo['id']?>"><?=$vo['game_name']?></option>
+                    <?php } ?>
+                </select>
+                <div class="text"><?=$vo['game_name']?></div>
+            </div>
+            <div class="search">
+                <input type="text" class="input_text" name="keyword">
+                <a class="search_btn"  href="javascript:void(0);"><?=\YII::t('common','search')?></a>
+                <div class='search_associated' style="display: none;">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
+        <div class="ticket_con">
+            <div class="ticket_r text_r">
+                <div class="ticket_r_box">
+                    <div class="text_box">
+                        <?php foreach($reply_list as $vo){?>
+                            <dl>
+                                <dt><img <?php if($this->params['user_info']['avatar_url']){?> src="<?=$this->params['user_info']['avatar_url']?>"<?php }else{ ?>src="<?=__AVATARS__?>/avatar_default_20160305.jpg"<?php }?> ></dt>
+                                <dd>
+                                    <h2><?=$vo['username']?><span><?=$vo['add_time']?></span></h2>
+                                    <div class="text"><?=$vo['content']?></div>
+                                </dd>
+                            </dl>
+                            <?php foreach($vo['reply'] as $reply){?>
+                                <dl class="system">
+                                    <dt><img src="<?=__IMG__?>/system_pic2.jpg"></dt>
+                                    <dd>
+                                        <h2>GM<span><?=$reply['add_time']?></span></h2>
+                                        <div class="text"><?=$reply['content']?></div>
+                                    </dd>
+
+                                    <?php if(empty($vo['status'])){?>
+                                    <dd class="if" style="display: none;">
+                                        <form class="solved_form" action="/support/subsolved" method="post">
+                                            <div class="stars stars_box" style="padding-right: 15px;">
+                                                <?=\YII::t('common','rateService')?>:
+                                                <ul>
+                                                    <li class="item01"></li>
+                                                    <li class="item02"></li>
+                                                    <li class="item03"></li>
+                                                    <li class="item04"></li>
+                                                    <li class="item05"></li>
+                                                </ul>
+
+                                            </div><br />
+                                            <div class="tit"><?=\YII::t('common','solvedProblem')?>?</div>
+                                            <input type="hidden" name="id" value="<?=$vo['id']?>" />
+                                            <input type="hidden" name="score" />
+                                            <input type="hidden" name="is_solved" />
+                                            <div class="sub" id="sub_solved">
+                                                <a style="z-index:99999" href="javascript:void(0)" class="sub_buttom sub_yes"><span><?=\YII::t('common','Yes')?></span></a>
+                                                <a style="z-index:99999" href="javascript:void(0)" class="sub_buttom sub_buttom02 sub_no"><span><?=\YII::t('common','No')?></span></a>
+                                            </div>
+                                        </form>
+                                    </dd>
+                                    <?php }else{ ?>
+                                    <dd class="if" style="display: none;">
+                                            <div class="stars stars_box" style="padding-right: 15px;">
+                                                <?=\YII::t('common','YourRatings')?>:
+                                                <ul>
+                                                    <li class="item01 <?php if($vo['score']==1){echo 'on';}?>" ></li>
+                                                    <li class="item02 <?php if($vo['score']==2){echo 'on';}?>"></li>
+                                                    <li class="item03 <?php if($vo['score']==3){echo 'on';}?>"></li>
+                                                    <li class="item04 <?php if($vo['score']==4){echo 'on';}?>"></li>
+                                                    <li class="item05 <?php if($vo['score']==5){echo 'on';}?>"></li>
+                                                </ul>
+                                            </div>
+                                    </dd>
+                                    <?php }?>
+                                </dl>
+                            <?php }?>
+                          <?php }?>
+                    </div>
+                    <?php if(empty($reply_list[0]['is_solved'])){?>
+                        <div class="dl_box">
+                            <form action="/support/subreply" method="post" id='sub_reply'>
+                                <dl>
+                                    <dd class="clearfix">
+                                        <textarea name="content" id="descrption_con"></textarea>
+                                    </dd>
+                                    <dt class="kong">&nbsp;</dt>
+                                    <dd class="clearfix sub_input">
+                                        <input type='hidden' value='<?=intval($_GET['id'])?>' name='forum_id' />
+                                        <input name="" type="submit" value="<?=\YII::t('common','Submit')?>" class="input_s input_s02">
+                                    </dd>
+                                </dl>
+                            </form>
+                        </div>
+                    <?php }?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="<?=__JS__?>/jquery.form.js"></script>
+    <SCRIPT type = "text/javascript" src = "<?php echo __STATIC__?>/ueditor/ueditor.config.js" ></SCRIPT>
+    <SCRIPT type="text/javascript" src="<?php echo __STATIC__?>/ueditor/ueditor.all.js"></SCRIPT>
+    <script>
+        $(function () {
+
+            $('#sub_reply').on("submit", function () {
+                sub_reply_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).ajaxSubmit({
+                    type: 'post',
+                    dataType: "json",
+                    success: sub_reply_result
+                });
+                return false;
+            });
+
+            UE.getEditor('descrption_con', {
+                toolbars: [
+                    [
+                        'undo', //撤销
+                        'redo', //重做
+                        'simpleupload' //单图上传
+                    ]
+                ],
+                zIndex: 9,
+                elementPathEnabled: false,
+                theme: "default", //皮肤
+                lang: "en", //语言
+                autoWidthEnabled: true,
+                initialFrameHeight: 300,
+                serverUrl: "/Public/src/static/ueditor/php/controller.php"
+            });
+
+            $(".stars_box li").each(function (i) {
+                var i = $(this).parents(".stars_box").find("li").index($(this));
+                $(this).parents(".solved_form").find("[name='score']").val(++i);
+            })
+
+
+            $(".stars_box ul li").on("click", function () {
+                $(this).parents(".stars_box").find("li").removeClass("on");
+                var i = $(this).parents(".stars_box").find("li").index($(this));
+                $(this).addClass("on");
+                $(this).parents(".solved_form").find("[name='score']").val(++i);
+            })
+
+            $('.solved_form a').on("click", function () {
+                if ($(this).hasClass("sub_yes"))
+                {
+                    $(this).parents(".solved_form").find("[name='is_solved']").val(1);//YES
+                } else
+                {
+                    $(this).parents(".solved_form").find("[name='is_solved']").val(0);//NO
+                }
+                solved_layer_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).parents(".solved_form").ajaxSubmit({
+                    success: solved_result
+                });
+                return false;
+            });
+
+
+        })
+
+        function solved_result(result) {
+            layer.close(solved_layer_index);
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.3, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.3, '#000'], offset: "auto", time: 800, end: function (index) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+        function sub_reply_result(result)
+        {
+            $("#sub_reply").resetForm();
+            layer.close(sub_reply_index);
+
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 800, end: function (index) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+    </script>

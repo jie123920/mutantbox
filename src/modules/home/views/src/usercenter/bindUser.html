@@ -1,0 +1,223 @@
+<script type="text/javascript" src="<?=__JS__?>/jquery.validate.min.js"></script>
+<style>
+    .other_user .login_gg{
+        width: 289px;
+        height: 59px;
+        text-align: center;
+        font-size: 20px;
+        text-indent: 40px;
+        color:#fff;
+        line-height: 59px;
+        background-image: url('<?=__IMG__?>/tt222.png');
+        font-weight: 700;
+    }
+    .other_user .login_fb{
+        width: 289px;
+        height: 59px;
+        font-size: 20px;
+        text-indent: 60px;
+        color:#fff;
+        line-height: 59px;
+        margin-bottom: 10px;
+        background-image: url('<?=__IMG__?>/feacebook_icon_back.png');
+        font-weight: 700;
+    }
+    .login_gg{
+        width: 289px;
+        height: 59px;
+        text-align: center;
+        font-size: 20px;
+        text-indent: 40px;
+        color:#fff;
+        line-height: 59px;
+        background-image: url('<?=__IMG__?>/tt222.png');
+        font-weight: 700;
+    }
+    .login_fb{
+        width: 289px;
+        height: 59px;
+        font-size: 20px;
+        text-indent: 60px;
+        color:#fff;
+        line-height: 59px;
+        margin-bottom: 10px;
+        background-image: url('<?=__IMG__?>/feacebook_icon_back.png');
+        font-weight: 700;
+    }
+</style>
+    <div class="user_con_bd_box">
+        <div class="user_con_bd connenct_accounts_box">
+            <div class="connenct_accounts">
+                <h3><?=\YII::t('common','ConnectAccounts')?></h3>
+                <ul>
+                    <li <?=in_array('facebook', $account_list) ? 'class="on"' : '';?>>
+                    <a rel="nofollow" href="javascript:void(0);" <?=in_array('facebook', $account_list) ? '' : 'onclick="bindFacebook()"';?>>
+                        <!--<img src="<?=__IMG__?>/<?=\YII::t('common','img_feacebook_icon')?>" alt="">-->
+                    <div class="login_fb"><?=Yii::t('common', 'Connect with Facebook')?></div>
+                        <h3><i></i>
+                        <?=in_array('facebook', $account_list) ? \YII::t('common','Connected') : \YII::t('common','NotConnected');?>
+                        </h3>
+                    </a>
+                    </li>
+                    <li <?=in_array('google', $account_list) ? 'class="on"' : '';?>>
+                    <a rel="nofollow" href="javascript:void(0);" <?=in_array('google', $account_list) ? '' : 'onclick="bindGoogle()"';?>>
+                        <!--<img src="<?=__IMG__?>/<?=\YII::t('common','img_google_icon')?>" alt="">-->
+                    <div class="login_gg"><?=Yii::t('common', 'Connect with Google')?></div>
+                        <h3><i></i><?=in_array('google', $account_list) ? \YII::t('common','Connected') : \YII::t('common','NotConnected');?></h3>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('.gift_sub').click(function () {
+            $('.layer_box').show();
+        })
+        $('.layer_box .bj,.copy_gift_sub').click(function () {
+            $('.layer_box').hide();
+        })
+
+        function open_win(type)
+        {
+            if (type == "facebook")
+            {
+                open_url = "/user/login?type=facebook";
+            }
+            else
+            {
+                open_url = "/user/login?type=google";
+            }
+
+            var iTop = ($(window).height() - 500) / 1.5
+            var iLeft = ($(window).width() - 710) / 2;
+
+            var win = window.open(open_url, "_blank", "width=700, height=500,top=" + iTop + ",left=" + iLeft);
+
+            t = setInterval((function (win) {
+                return function () {
+                    if (win.closed)
+                    {
+                        if ($.cookie("user_auth_sign").length > 0)
+                        {
+                            //win.close();
+                            window.location.reload();
+                            clearInterval(t);
+                        }
+                    }
+                };
+            })(win), 1000);
+
+        }
+    </script>
+    <script>
+        function start() {
+            gapi.load('auth2', function () {
+                auth2 = gapi.auth2.init({
+                    client_id: '455615275123-gnkurafbvjr751fioggsujmrli55ltu8.apps.googleusercontent.com'
+                })
+            });
+        }
+
+        function logInWithGoogle()
+        {
+            auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(googleSignInCallback);
+        }
+
+        function googleSignInCallback(authResult) {
+            if (authResult['code']) {
+                layer.msg('Logging...', {icon: 16, time: 0, shade: [0.7, '#000']});
+                $.post("/login/googlecallBack", {code: authResult['code']}, function (result) {
+                    layer.closeAll();
+                    if (result.error > 0)
+                    {
+                        layer_alert(result.msg);
+                    }
+                    else
+                    {
+                        location.reload();
+                    }
+                })
+            } else {
+                layer_alert('获取Google Code错误.');
+            }
+        }
+
+        function bindGoogle()
+        {
+            auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(googleBindCallback);
+        }
+
+        function googleBindCallback(authResult) {
+            if (authResult['code']) {
+                layer.msg('Logging...', {icon: 16, time: 0, shade: [0.7, '#000']});
+                $.post("/login/bindgooglecallback", {code: authResult['code']}, function (result) {
+                    layer.closeAll();
+                    if (result.error > 0)
+                    {
+                        layer_alert(result.msg);
+                    }
+                    else
+                    {
+                        location.reload();
+                    }
+                })
+            } else {
+                layer_alert('获取Google Code错误.');
+            }
+        }
+
+        bindFacebook = function () {
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    layer.msg('Logging...', {icon: 16, time: 0, shade: [0.7, '#000']});
+                    $.post("/login/bindfacebookcallback", function (result) {
+                        layer.closeAll();
+                        if (result.error > 0)
+                        {
+                            layer_alert(result.msg);
+                        }
+                        else
+                        {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    layer_alert('<?=\YII::t('common','cancelledAuthorize')?>');
+                }
+            }, {scope: 'email'});
+            return false;
+        };
+
+
+        logInWithFacebook = function () {
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    layer.msg('Logging...', {icon: 16, time: 0, shade: [0.7, '#000']});
+                    $.post("/login/facebookcallBack", function (result) {
+                        layer.closeAll();
+                        if (result.error > 0)
+                        {
+                            layer_alert(result.msg);
+                        }
+                        else
+                        {
+                            location.reload();
+                        }
+                    })
+                } else {
+                    layer_alert('<?=\YII::t('common','cancelledAuthorize')?>');
+                }
+            }, {scope: 'email'});
+            return false;
+        };
+
+
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '714278052039214',
+                cookie: true, // This is important, it's not enabled by default
+                version: 'v2.12'
+            });
+        };
+</script>

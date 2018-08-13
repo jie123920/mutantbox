@@ -1,0 +1,189 @@
+<!--<extend name="Public/support_base" />-->
+<block name="head_css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/service.css">
+</block>
+<block name="body">
+
+        <div class="ticket_con">
+            <div class="ticket_r text_r">
+                <div class="ticket_r_box">
+                    <div class="text_box">
+                        <volist name="reply_list" id="vo">
+                            <dl>
+                                <dt><img <notempty name="user_info.avatar_url">src="__AVATARS__/{$user_info.avatar_url}"<else />src="__AVATARS__/default.jpg"</notempty> ></dt>
+                                <dd>
+                                    <h2>{$vo.username}<span>{$vo.add_time}</span></h2>
+                                    <div class="text">{$vo.content}</div>
+                                </dd>
+                            </dl>
+
+                            <volist name="vo.reply" id="reply">
+                                <dl class="system">
+                                    <dt><img src="__IMG__/system_pic2.jpg"></dt>
+                                    <dd>
+                                        <h2>{$reply.username}<span>{$reply.add_time}</span></h2>
+                                        <div class="text">{$reply.content}</div>
+                                    </dd>
+
+                                    <if condition="empty($vo['status'])">
+                                    <dd class="if">
+                                        <form class="solved_form" action="{:U('Support/subSolved')}" method="post">
+                                            <div class="stars stars_box" style="padding-right: 15px;">
+                                                Please rate our service:
+                                                <ul>
+                                                    <li class="item01"></li>
+                                                    <li class="item02"></li>
+                                                    <li class="item03"></li>
+                                                    <li class="item04"></li>
+                                                    <li class="item05"></li>
+                                                </ul>
+
+                                            </div>
+                                            <div class="tit">Has this solved your problem?</div>
+                                            <input type="hidden" name="id" value="{$vo.id}" />
+                                            <input type="hidden" name="score" />
+                                            <input type="hidden" name="is_solved" />
+                                            <div class="sub" id="sub_solved">
+                                                <a style="z-index:99999" href="javascript:void(0)" class="sub_buttom sub_yes"><span>Yes</span></a>
+                                                <a style="z-index:99999" href="javascript:void(0)" class="sub_buttom sub_buttom02 sub_no"><span>No</span></a>
+                                            </div>
+                                        </form>
+                                    </dd>
+                                    <else />
+                                    <dd class="if">
+                                            <div class="stars" style="padding-right: 15px;">
+                                                Your Ratings:
+                                                <ul>
+                                                    <li class="item01 <eq name='vo.score' value='1'>on</eq>" ></li>
+                                                    <li class="item02 <eq name='vo.score' value='2'>on</eq>"></li>
+                                                    <li class="item03 <eq name='vo.score' value='3'>on</eq>"></li>
+                                                    <li class="item04 <eq name='vo.score' value='4'>on</eq>"></li>
+                                                    <li class="item05 <eq name='vo.score' value='5'>on</eq>"></li>
+                                                </ul>
+                                            </div>
+                                    </dd>
+                                    </if>
+                                </dl>
+                            </volist>
+                        </volist>
+
+                    </div>
+                    <if condition="empty($reply_list[0]['is_solved'])">
+                    <div class="dl_box">
+                        <form action="{:U('Support/subReply')}" method="post" id='sub_reply'>
+                            <dl>
+                                <dd class="clearfix">
+                                    <textarea name="content" id="descrption_con"></textarea>
+                                </dd>
+                                <dt class="kong">&nbsp;</dt>
+                                <dd class="clearfix sub_input">
+                                    <input type='hidden' value='{$Think.get.id}' name='forum_id' />
+                                    <input name="" type="submit" value="Submit" class="input_s input_s02">
+                                </dd>
+                            </dl>
+                        </form>
+                    </div>
+                    </if>
+                </div>
+            </div>
+        </div>
+
+</block>
+<block name="page_js">
+    <script src="__JS__/jquery.form.js"></script>
+    <SCRIPT type = "text/javascript" src = "__PUBLIC__/static/ueditor/ueditor.config.js" ></SCRIPT>
+    <SCRIPT type="text/javascript" src="__PUBLIC__/static/ueditor/ueditor.all.js"></SCRIPT>
+    <script>
+        $(function () {
+
+            $('#sub_reply').on("submit", function () {
+                sub_reply_index = layer.msg('Loading...', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).ajaxSubmit({
+                    type: 'post',
+                    dataType: "json",
+                    success: sub_reply_result
+                });
+                return false;
+            });
+
+            UE.getEditor('descrption_con', {
+                toolbars: [
+                    [
+                        'undo', //撤销
+                        'redo', //重做
+                        'simpleupload' //单图上传
+                    ]
+                ],
+                zIndex: 9,
+                elementPathEnabled: false,
+                theme: "default", //皮肤
+                lang: "en", //语言
+                autoWidthEnabled: true,
+                initialFrameHeight: 300
+            });
+
+            $(".stars_box li").each(function (i) {
+                var i = $(this).parents(".stars_box").find("li").index($(this));
+                $(this).parents(".solved_form").find("[name='score']").val(++i);
+            })
+
+            $(".stars_box ul li").on("click", function () {
+                $(this).parents(".stars_box").find("li").removeClass("on");
+                var i = $(this).parents(".stars_box").find("li").index($(this));
+                $(this).addClass("on");
+                $(this).parents(".solved_form").find("[name='score']").val(++i);
+            })
+
+            $('.solved_form a').on("click", function () {
+                if ($(this).hasClass("sub_yes"))
+                {
+                    $(this).parents(".solved_form").find("[name='is_solved']").val(1);//YES
+                } else
+                {
+                    $(this).parents(".solved_form").find("[name='is_solved']").val(0);//NO
+                }
+                solved_layer_index = layer.msg('Loading...', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).parents(".solved_form").ajaxSubmit({
+                    success: solved_result
+                });
+                return false;
+            });
+
+
+        })
+
+        function solved_result(result) {
+            layer.close(solved_layer_index);
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.3, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.3, '#000'], offset: "auto", time: 800, end: function (index) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+        function sub_reply_result(result)
+        {
+            $("#sub_reply").resetForm();
+            layer.close(sub_reply_index);
+
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 800, end: function (index) {
+                        location.reload();
+                    }
+                });
+            }
+        }
+    </script>
+</block>

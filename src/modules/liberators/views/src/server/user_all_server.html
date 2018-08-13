@@ -1,0 +1,39 @@
+<?php
+use app\Library\gameapi\Play;
+use yii\helpers\Url;
+?>
+<?php if ($isLogined): ?>
+  <?php if ($myServiceLists): ?>
+    <?php foreach ($myServiceLists as $item): ?>
+      <li style="width:100%">
+        <?php if (isset($item['server_status'])): ?>
+          <?php if ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']): ?>
+            <i class="iconfont3 open"></i>
+            <a href="<?=isset($item['server_id']) ? \yii::$app->params['MY_URL']['WEB'] . "play/index?server_id=" . $item['server_id'] : 'javascript:;';?>">
+              <span><?=isset($item['server_name']) ? $item['server_name'] : '---';?></span>
+              <span><?=isset($item['game_user_info']['name']) ? $item['game_user_info']['name'] : '---';?></span>
+              <span><?=isset($item['game_user_info']['level']) ? 'Lv.' . $item['game_user_info']['level'] : '---';?></span>
+            </a>
+          <?php else: ?>
+            <i class="iconfont3 hammer"></i>
+            <a href="javascript:layer_alert('<?=\YII::t('common','Maintenance')?>', 4);">
+              <span><?=$item['server_name'];?></span>
+              <span>(<?=\YII::t('common','Maintenance')?>)</span>
+              <span>(<?=\YII::t('common','Maintenance')?>)</span>
+            </a>
+          <?php endif ?>
+        <?php else: ?>
+          <a href="'javascript:;';?>">
+            <em>---</em>
+            <em>---</em>
+            <em>---</em>
+          </a>
+        <?php endif ?>
+      </li>
+    <?php endforeach ?>
+  <?php else: ?>
+    <li style="width:100%"><i class="iconfont3 open"></i><a href="javascript:;"><span>---</span><span>---</span><span>---</span></a></li>
+  <?php endif ?>
+<?php else: ?>
+  <li style="width:100%"><i class="iconfont3 open"></i><a href="javascript:playGame()"><span>---</span><span>---</span><span>---</span></a></li>
+<?php endif ?>

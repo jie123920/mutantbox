@@ -1,0 +1,906 @@
+<?php
+use app\Library\gameapi\Play;
+?>
+<style>
+.container{
+    background: url(<?=__IMG__?>/liberator_bg.jpg);
+    background-position: center 440px;
+}
+</style>
+    <!--弹窗-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><?=\YII::t('common','PlayerCode')?></h4>
+                </div>
+                <div class="modal-body">
+                    <dl class="inp"><input id="copytext" readonly="readonly" type="text" value="MyVxwRDYj2GdvZ2" placeholder="MyVxwRDYj2GdvZ2"><a id="copy" href="javascript:;"><img src="<?=__IMG__?>/<?=\YII::t('common','img_copy')?>"></a></dl>
+                    <dl>
+                        <?=\YII::t('common','Note')?>:<br>
+                        1.<?=\YII::t('common','giftGold')?>.<br/>
+                        2.<?=\YII::t('common','useEach')?>.<br/>
+                        3.<?=\YII::t('common','clickRedeem')?>.
+                    </dl>
+                    <div class="row dis">
+                        <div class="col-xs-6">
+                            <img width='237' height='237' src="<?=__IMG__?>/demo1.png">
+                        </div>
+                        <div class="col-xs-6">
+                            <img width='237' height='237' src="<?=__IMG__?>/demo2.png">
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row items-container">
+            <div class="col-md-5 item in_box">
+                <div id="facebook">
+                    <div class="facebook_small">
+                        <div class="fb-page" data-href="https://www.facebook.com/LiberatorsGame"
+                        data-width="500" data-height="315" data-hide-cover="false" data-show-facepile="false"
+                        data-show-posts="false"></div>
+                    </div>
+                    <div class="facebook_big">
+                        <div class="fb-page" data-href="https://www.facebook.com/LiberatorsGame" data-height="315" data-width="500" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="true">
+                            <div class="fb-xfbml-parse-ignore">
+                                <blockquote cite="https://www.facebook.com/LiberatorsGame">
+                                    <a href="https://www.facebook.com/LiberatorsGame">Liberators <?=\YII::t('common','Game')?> Facebook</a>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="news_img">
+                    <div class="service_list">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th  colspan="3"><?=\YII::t('common','YourServers')?><a href="/server"><?=\YII::t('common','More')?></a></th>
+                                </tr>
+                                <?php if ($isLogined){?>
+                                <?php if($myServiceLists){?>
+                                    <?php foreach ($myServiceLists as $item){?>
+                                        <tr>
+                                            <td>
+                                                <?php if (isset($item['server_status'])){ ?>
+                                                    <?php if ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']){ ?>
+                                                        <a href="<?=isset($item['server_id']) ? \YII::$app->params['MY_URL']['WEB'] . "play/index?server_id=" . $item['server_id'] : 'javascript:;';?>">
+                                                            <i class="iconfont3 open" style="width: 15px;"></i>
+                                                        <em><?=isset($item['server_name']) ? $item['server_name'] : '---';?></em>
+                                                            <em><?=isset($item['game_user_info']['name']) ? $item['game_user_info']['name'] : '---';?></em>
+                                                            <em><?=isset($item['game_user_info']['level']) ? 'Lv.' . $item['game_user_info']['level'] : '---';?></em>
+                                                        </a>
+                                                    <?php }else{ ?>
+                                                        <a href="javascript:layer_alert('<?=\YII::t('common','Maintenance');?>', 4);"><i class="iconfont3 hammer" style="width: 15px;"></i><em><?=$item['server_name'];?></em><em>(<?=\YII::t('common','Maintenance');?>)</em><em>(<?=\YII::t('common','Maintenance');?>)</em></a>
+                                                    <?php } ?>
+                                                <?php }else{ ?>
+                                                    <a href="javascript:;">
+                                                        <i class="iconfont3" style="width: 15px;"></i><em>---</em><em>---</em><em>---</em>
+                                                    </a>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php } ?>
+                                <?php }else{ ?>
+                                    <?php if($myServiceLists){?>
+                                        <?php foreach ($myServiceLists as $item){ ?>
+                                            <tr>
+                                                <td>
+                                                    <a href="javascript:playGame();">
+                                                    <i class="iconfont3" style="width: 15px;"></i>
+                                                     <em>---</em>
+                                                     <em>---</em>
+                                                     <em>---</em>
+                                                 </a>
+                                             </td>
+                                         </tr>
+                                     <?php }?>
+                                <?php }?>
+                             <?php } ?>
+                         </tbody>
+                     </table>
+                     <table class="tb_server">
+                        <tbody>
+                            <tr>
+                                <th  colspan="3"><?=\YII::t('common','RecommendedServers')?><a href="/server"><?=\YII::t('common','More')?></a></th>
+                            </tr>
+                            <?php if($recommendServer){?>
+                                <?php foreach ($recommendServer as $item): ?>
+                                    <tr>
+                                        <td>
+                                            <?php
+                                            if ($isLogined) {
+                                                if ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']) {
+                                                    $url = \YII::$app->params['MY_URL']['WEB']. "play/index?server_id=" . $item['server_id'];
+                                                }else{
+                                                    $url = "javascript:var dateObj = new Date(" . $item['first_opentime'] . "000);var date = dateObj.getFullYear() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getDate(); var time = ('0' + dateObj.getHours()).substring(('0' + dateObj.getHours()).length-2, ('0' + dateObj.getHours()).length) + ':' + ('0' + dateObj.getMinutes()).substring(('0' + dateObj.getMinutes()).length-2, ('0' + dateObj.getMinutes()).length);layer_alert('".sprintf(\YII::t('common','ServerOpenNotice'),'\'+date+\'','\'+time+\'')."', 4);";
+                                                }
+                                            }else{
+                                                $url = 'javascript:playGame();';
+                                            }
+                                            ?>
+                                            <a href="<?=$url;?>">
+                                                <i style="width: 15px;" class="iconfont3 <?php
+                                                switch ($item['server_status']) {
+                                                    case Play::$OPEN_STATE['OPENING']['value']:
+                                                    if ($item['force_style'] == Play::$FORCE_STYLE['NORMAL']['value']) {
+                                                      echo 'right';
+                                                      break;
+                                                  }elseif ($item['force_style'] == Play::$FORCE_STYLE['HOT']['value']) {
+                                                      echo 'fire';
+                                                      break;
+                                                  }
+                                                 echo 'fire';
+                                                  break;
+
+                                                  case Play::$OPEN_STATE['MAINTAINING']['value']:
+                                                  echo 'hammer';
+                                                  break;
+
+                        default: // 待开服
+                        echo 'door';
+                        break;
+                    }
+                    ;?>"></i>
+                                                <em>
+                                                    <?=$item['server_name'];?>
+                                                </em>
+                                                <em>
+                                                    <?=\app\helpers\myhelper::getZoneName(['sity' => $item['timezone']]);?>
+                                                </em>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach?>
+                            <?php }?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 item game_commanders" style="float:right">
+            <div class="tit_hd"><ul>
+                <li class="on"><?=\YII::t('common','Video')?></li>
+                <li><?=\YII::t('common','Events')?></li>
+                <li><?=\YII::t('common','Announcements')?></li>
+            </ul>
+        </div>
+        <div class="con_bd">
+            <div class="con_item" style="display:block" >
+                        <div class="con_video">
+                            <div class="on">
+                                <iframe src="<?=isset($firstvideo['video_url'])?$firstvideo['video_url']:''?>" id="player" width="100%" height="315" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                <div class="nav video_list" id="nav">
+                    <div id="nav-all">
+                        <?php if($videoList){?>
+                        <?php foreach($videoList as $data){?>
+                            <div class="nav-i">
+                                <div class="dv" video_url="<?=$data['video_url']?>?enablejsapi=1">
+                                    <img src="<?php  if(strstr($data['img_source'],'http')||strstr($data['img_source'],'//')){echo $data['img_source'];}else{echo '/Uploads/ArticlePicture/'.$data['img_source'];}?>">
+                                    <i class="icon_video"></i>
+                                </div>
+                                <div class="sc"><?=$data['title']?></div>
+                            </div>
+                        <?php }}?>
+                    </div>
+                    <a class="last-next" id="last">
+                    </a>
+                    <a class="last-next" id="next">
+                    </a>
+                </div>
+                    </div>
+                    <div class="con_item">
+                        <div class="event_img">
+                            <ul class="_box1">
+                                <?php $i = 1;?>
+                                <?php foreach($eventList as $data){?>
+                                    <li <?php if ($i == 1) {echo 'class="on"';}?>><a href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><img src="<?php  if(strstr($data['img_source'],'http')||strstr($data['img_source'],'//')){echo $data['img_source'];}else{echo '/Uploads/ArticlePicture/'.$data['img_source'];}?>" alt=""><?=$data['title']?></a></li>
+                                    <?php $i++;?>
+                                <?php }?>
+                            </ul>
+                            <div class="i_square spanbox1" style="display: none;">
+                                <?php $i = 1;?>
+                                <?php foreach($eventList as $data){?>
+                                    <span <?php if ($i == 1) {echo 'class="cur"';}?>></span>
+                                    <?php $i++;?>
+                                <?php }?>
+                            </div>
+                        </div>
+                        <ul class="event_list">
+                            <?php foreach($eventList2 as $data){?>
+                                <li><a target="_blank" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></li>
+                            <?php }?>
+                        </ul>
+                        <p class="list_more"><a href="/news?fid=16"><?=\YII::t('common','SeeMore')?></a></p>
+                    </div>
+                    <div class="con_item">
+                        <div class="event_img">
+                            <ul class="_box2">
+                                <?php $i = 1;?>
+                                <?php foreach($anList as $data){?>
+                                    <li <?php if ($i == 1) {echo 'class="on"';}?>><a href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><img src="<?php  if(strstr($data['img_source'],'http')||strstr($data['img_source'],'//')){echo $data['img_source'];}else{echo '/Uploads/ArticlePicture/'.$data['img_source'];}?>" alt=""><?=$data['title']?></a></li>
+                                    <?php $i++;?>
+                                <?php }?>
+                            </ul>
+                            <div class="i_square spanbox2" style="display: none;">
+                                <?php $i = 1;?>
+                                <?php foreach($anList as $data){?>
+                                    <span  <?php if ($i == 1) {echo 'class="cur"';}?>></span>
+                                    <?php $i++;?>
+                                <?php }?>
+                            </div>
+                        </div>
+                        <ul class="event_list">
+                            <?php foreach($anList2 as $data){?>
+                                 <li><a target="_blank" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></li>
+                            <?php }?>
+                        </ul>
+                        <p class="list_more"><a href="/news?fid=17"><?=\YII::t('common','SeeMore')?></a></p>
+                    </div>
+                </div>
+                <div class="invite_code"><a data-toggle="modal" data-target="#myModal" href="javascript:;"><img src="<?=__IMG__?>/<?=\YII::t('common','img_code_invite')?>" alt=""></a></div>
+            </div>
+        </div>
+        <div class="row items-container" style="margin-top:14px">
+            <div class="game_binzhong">
+                <div class="g_renwu" id="m_portraits"><img title="<?=$heroInfo['e_name']?>" alt="<?=$heroInfo['e_name']?>"  src="<?=$heroInfo['m_portraits']?>"></div>
+                <div class="arms_class_r">
+                    <h2 id="e_name"><?=$heroInfo['e_name']?></h2>
+                    <div class="arms_info">
+                        <ul>
+                            <li style="width: 100%;font-weight: 800"><?=\YII::t('common','stats')?> </li>
+                            <li class="info_leadership" style="width: 100%"><?=\YII::t('common','Leadership')?>: <span id="lds"><?=$heroInfo['lds']?></span></li>
+                            <li class="info_strength" style="width: 100%"><?=\YII::t('common','Strength')?>: <span id="str"><?=$heroInfo['str']?></span></li>
+                            <li class="info_intelligence" style="width: 100%"><?=\YII::t('common','intelligence')?>: <span id="int"><?=$heroInfo['int']?></span></li>
+                            <li class="info_intelligence" style="width: 100%"><?=\YII::t('common','unit')?>: <span id="unit"><?=$heroInfo['unit']?></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="description" class="text"><?=$heroInfo['description']?></div>
+                <div class="g_renwu_xuanze picScroll_top">
+                    <div class="bd">
+                        <ul id="heroimg">
+                            <?php
+                                $i=1;
+                            ?>
+                            <?php if(!empty($heroImg)){?>
+                                <?php  foreach($heroImg as $data){?>
+                                    <?php if($data){?>
+                                    <li <?php if($i==1){echo 'class="on"';}?> ><img data="<?=$data['id']?>" src="<?=$data['portraits']?>" width="64" height="64"/></li>
+                                    <?php }?>
+                                <?php $i++;?>
+                                <?php }?>
+                            <?php }?>
+                        </ul>
+                    </div>
+                    <a class="prev"></a>
+                    <a class="next"></a>
+                </div>
+            </div>
+        </div>
+        <div class="row items-container" id="lists">
+            <div class="col-md-6 item g_news_box1"><a href="/news?fid=12" class="news_bg"><img title="liberators cheats" alt="liberators cheats" src="<?=__IMG__?>/<?=\YII::t('common','img_i8')?>"></a>
+                <div class="g_news">
+                   <div class="mask_box">
+                       <?php foreach($tutorailList as $data){?>
+                            <p><a target="_blank" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></p>
+                       <?php }?>
+                        <span><a href="/news?fid=12"><?=\YII::t('common','SeeMore')?></a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 item g_news_box2">
+                <div class="g_news">
+                    <a href="/news?fid=13"><img src="<?=__IMG__?>/<?=\YII::t('common','img_i7')?>"></a><div class="light_gray">
+                        <?php foreach($strategyList as $data){?>
+                            <p><a target="_blank" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></p>
+                        <?php }?>
+                    </div>
+                    <span class="r_bottom"><a href="/news?fid=13"><?=\YII::t('common','SeeMore')?></a></span>
+                </div>
+                <div class="g_news">
+                    <div class="dark_gray">
+                        <?php foreach($orignieslList as $data){?>
+                            <p><a target="_blank" href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></p>
+                        <?php }?>
+                    </div><a href="/news?fid=14"><img src="<?=__IMG__?>/<?=\YII::t('common','img_i9')?>"></a>
+                    <span class="r_bottom"><a href="/news?fid=14"><?=\YII::t('common','SeeMore')?></a></span>
+                </div>
+            </div>
+        </div>
+        <div class="row items-container">
+            <div class="row">
+                <div id="owl-demo" class="owl-carousel">
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/<?=\YII::t('common','img_ow3')?>" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/<?=\YII::t('common','img_ow3')?>" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/<?=\YII::t('common','img_ow6')?>" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/<?=\YII::t('common','img_ow6')?>" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/<?=\YII::t('common','img_ow5')?>" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/<?=\YII::t('common','img_ow5')?>" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/<?=\YII::t('common','img_ow1')?>" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/<?=\YII::t('common','img_ow1')?>" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/owl2.jpg" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/owl2.jpg" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/owl4.jpg" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/owl4.jpg" layer-pid="" ></div>
+                    <div class="items"><img class="lazyOwl" data-src="<?=__IMG__?>/<?=\YII::t('common','img_ow8')?>" title="About Liberators" alt="About Liberators" layer-src="<?=__IMG__?>/<?=\YII::t('common','img_ow8')?>" layer-pid="" ></div>
+                </div>
+            </div>
+        </div>
+        <div class="row items-container" id="company" style="display:none">
+            <div class="row">
+                <h1><?=\YII::t('common','Community')?></h1>
+                <div class="col-sm-5 item">
+                    <h2><?=\YII::t('common','VisitForum')?></h2>
+                    <dl><?=\YII::t('common','discussTips')?></dl>
+                    <a href="#"><img src="<?=__IMG__?>/btns.png"></a>
+                </div>
+            </div>
+            <div class="col-sm-2 item">
+                <span class="sp_hr"></span>
+            </div>
+            <div class="col-sm-4 item col-sm-offset-1">
+                <h2><?=\YII::t('common','FollowLiberators')?></h2>
+                <dl><?=\YII::t('common','getNews')?></dl>
+                <a href="#"><i class="fa fa-facebook"></i>facebook</a><a href="#"><i class="fa fa-twitter"></i>TWITTER</a><a href="#"><i class="fa fa-youtube-play"></i>youtube</a>
+            </div>
+        </div>
+        <div class="row items-container" id="ad">
+            <a href="<?php  if($this->params['is_login']){?><?=\YII::$app->params['MY_URL']['WEB']?>game/redirecturl<?php }else{ ?>javascript:playGame()<?php }?>"><img src="<?=__IMG__?>/<?=\YII::t('common','img_ad')?>"></a>
+        </div>
+    </div>
+
+    <script src="<?=__JS__?>/bootstrap.js"></script>
+    <script type="text/javascript" src="<?=__JS__?>/jquery.matchHeight.js"></script>
+    <script type="text/javascript" src="<?=__JS__?>/jquery.slides.min.js"></script>
+
+
+    <script>
+        var sina = {
+            $: function(objName) {
+                if (document.getElementById) {
+                    return eval('document.getElementById("' + objName + '")')
+                } else {
+                    return eval('document.all.' + objName)
+                }
+            },
+            isIE: navigator.appVersion.indexOf("MSIE") != -1 ? true : false,
+            addEvent: function(l, i, I) {
+                if (l.attachEvent) {
+                    l.attachEvent("on" + i, I)
+                } else {
+                    l.addEventListener(i, I, false)
+                }
+            },
+            delEvent: function(l, i, I) {
+                if (l.detachEvent) {
+                    l.detachEvent("on" + i, I)
+                } else {
+                    l.removeEventListener(i, I, false)
+                }
+            },
+            readCookie: function(O) {
+                var o = "",
+                        l = O + "=";
+                if (document.cookie.length > 0) {
+                    var i = document.cookie.indexOf(l);
+                    if (i != -1) {
+                        i += l.length;
+                        var I = document.cookie.indexOf(";", i);
+                        if (I == -1) I = document.cookie.length;
+                        o = unescape(document.cookie.substring(i, I))
+                    }
+                };
+                return o
+            },
+            writeCookie: function(i, l, o, c) {
+                var O = "",
+                        I = "";
+                if (o != null) {
+                    O = new Date((new Date).getTime() + o * 3600000);
+                    O = "; expires=" + O.toGMTString()
+                };
+                if (c != null) {
+                    I = ";domain=" + c
+                };
+                document.cookie = i + "=" + escape(l) + O + I
+            },
+            readStyle: function(I, l) {
+                if (I.style[l]) {
+                    return I.style[l]
+                } else if (I.rentStyle) {
+                    return I.currentStyle[l]
+                } else if (document.defaultView && document.defaultView.getComputedStyle) {
+                    var i = document.defaultView.getComputedStyle(I, null);
+                    return i.getPropertyValue(l)
+                } else {
+                    return null
+                }
+            }
+        };
+
+        function ScrollPic(scrollContId, arrLeftId, arrRightId, dotListId) {
+            this.scrollContId = scrollContId;
+            this.arrLeftId = arrLeftId;
+            this.arrRightId = arrRightId;
+            this.dotListId = dotListId;
+            this.dotClassName = "dotItem";
+            this.dotOnClassName = "dotItemOn";
+            this.dotObjArr = [];
+            this.pageWidth = 0;
+            this.frameWidth = 0;
+            this.speed = 10;
+            this.space = 10;
+            this.pageIndex = 0;
+            this.autoPlay = true;
+            this.autoPlayTime = 5;
+            var _autoTimeObj, _scrollTimeObj, _state = "ready";
+            this.stripDiv = document.createElement("DIV");
+            this.listDiv01 = document.createElement("DIV");
+            this.listDiv02 = document.createElement("DIV");
+            if (!ScrollPic.childs) {
+                ScrollPic.childs = []
+            };
+            this.ID = ScrollPic.childs.length;
+            ScrollPic.childs.push(this);
+            this.initialize = function() {
+                if (!this.scrollContId) {
+                    throw new Error("必须指定scrollContId.");
+                    return
+                };
+                this.scrollContDiv = sina.$(this.scrollContId);
+                if (!this.scrollContDiv) {
+                    throw new Error("scrollContId不是正确的对象.(scrollContId = \"" + this.scrollContId + "\")");
+                    return
+                };
+
+                this.scrollContDiv.style.width = this.frameWidth + "px";
+                this.scrollContDiv.style.overflow = "hidden";
+                this.listDiv01.innerHTML = this.listDiv02.innerHTML = this.scrollContDiv.innerHTML;
+                this.scrollContDiv.innerHTML = "";
+                this.scrollContDiv.appendChild(this.stripDiv);
+                this.stripDiv.appendChild(this.listDiv01);
+                this.stripDiv.appendChild(this.listDiv02);
+                this.stripDiv.style.overflow = "hidden";
+                this.stripDiv.style.zoom = "1";
+                this.stripDiv.style.width = "32766px";
+                <?php echo "this.listDiv01." . "style" . ".cssFloat";?> = "left";
+                <?php echo "this.listDiv02." . "style" . ".cssFloat";?> = "left";
+                sina.addEvent(this.scrollContDiv, "mouseover", Function("ScrollPic.childs[" + this.ID + "].stop()"));
+                sina.addEvent(this.scrollContDiv, "mouseout", Function("ScrollPic.childs[" + this.ID + "].play()"));
+                if (this.arrLeftId) {
+                    this.arrLeftObj = sina.$(this.arrLeftId);
+                    if (this.arrLeftObj) {
+                        sina.addEvent(this.arrLeftObj, "mousedown", Function("ScrollPic.childs[" + this.ID + "].rightMouseDown()"));
+                        sina.addEvent(this.arrLeftObj, "mouseup", Function("ScrollPic.childs[" + this.ID + "].rightEnd()"));
+                        sina.addEvent(this.arrLeftObj, "mouseout", Function("ScrollPic.childs[" + this.ID + "].rightEnd()"))
+                    }
+                };
+                if (this.arrRightId) {
+                    this.arrRightObj = sina.$(this.arrRightId);
+                    if (this.arrRightObj) {
+                        sina.addEvent(this.arrRightObj, "mousedown", Function("ScrollPic.childs[" + this.ID + "].leftMouseDown()"));
+                        sina.addEvent(this.arrRightObj, "mouseup", Function("ScrollPic.childs[" + this.ID + "].leftEnd()"));
+                        sina.addEvent(this.arrRightObj, "mouseout", Function("ScrollPic.childs[" + this.ID + "].leftEnd()"))
+                    }
+                };
+                if (this.dotListId) {
+                    this.dotListObj = sina.$(this.dotListId);
+                    if (this.dotListObj) {
+                        var pages = Math.round(this.listDiv01.offsetWidth / this.frameWidth + 0.4),
+                                i, tempObj;
+                        for (i = 0; i < pages; i++) {
+                            tempObj = document.createElement("span");
+                            this.dotListObj.appendChild(tempObj);
+                            this.dotObjArr.push(tempObj);
+                            if (i == this.pageIndex) {
+                                tempObj.className = this.dotClassName
+                            } else {
+                                tempObj.className = this.dotOnClassName
+                            };
+                            tempObj.title = "第" + (i + 1) + "页";
+                            sina.addEvent(tempObj, "click", Function("ScrollPic.childs[" + this.ID + "].pageTo(" + i + ")"))
+                        }
+                    }
+                };
+                if (this.autoPlay) {
+                    this.play()
+                }
+            };
+            this.leftMouseDown = function() {
+                if (_state != "ready") {
+                    return
+                };
+                _state = "floating";
+                _scrollTimeObj = setInterval("ScrollPic.childs[" + this.ID + "].moveLeft()", this.speed)
+            };
+            this.rightMouseDown = function() {
+                if (_state != "ready") {
+                    return
+                };
+                _state = "floating";
+                _scrollTimeObj = setInterval("ScrollPic.childs[" + this.ID + "].moveRight()", this.speed)
+            };
+            this.moveLeft = function() {
+                if (this.scrollContDiv.scrollLeft + this.space >= this.listDiv01.scrollWidth) {
+                    this.scrollContDiv.scrollLeft = this.scrollContDiv.scrollLeft + this.space - this.listDiv01.scrollWidth
+                } else {
+                    this.scrollContDiv.scrollLeft += this.space
+                };
+                this.accountPageIndex()
+            };
+            this.moveRight = function() {
+                if (this.scrollContDiv.scrollLeft - this.space <= 0) {
+                    this.scrollContDiv.scrollLeft = this.listDiv01.scrollWidth + this.scrollContDiv.scrollLeft - this.space
+                } else {
+                    this.scrollContDiv.scrollLeft -= this.space
+                };
+                this.accountPageIndex()
+            };
+            this.leftEnd = function() {
+                if (_state != "floating") {
+                    return
+                };
+                _state = "stoping";
+                clearInterval(_scrollTimeObj);
+                var fill = this.pageWidth - this.scrollContDiv.scrollLeft % this.pageWidth;
+                this.move(fill)
+            };
+            this.rightEnd = function() {
+                if (_state != "floating") {
+                    return
+                };
+                _state = "stoping";
+                clearInterval(_scrollTimeObj);
+                var fill = -this.scrollContDiv.scrollLeft % this.pageWidth;
+                this.move(fill)
+            };
+            this.move = function(num, quick) {
+                var thisMove = num / 5;
+                if (!quick) {
+                    if (thisMove >
+                            this.space) {
+                        thisMove = this.space
+                    };
+                    if (thisMove < -this.space) {
+                        thisMove = -this.space
+                    }
+                };
+                if (Math.abs(thisMove) < 1 && thisMove != 0) {
+                    thisMove = thisMove >= 0 ? 1 : -1
+                } else {
+                    thisMove = Math.round(thisMove)
+                };
+                var temp = this.scrollContDiv.scrollLeft + thisMove;
+                if (thisMove > 0) {
+                    if (this.scrollContDiv.scrollLeft + thisMove >= this.listDiv01.scrollWidth) {
+                        this.scrollContDiv.scrollLeft = this.scrollContDiv.scrollLeft + thisMove - this.listDiv01.scrollWidth
+                    } else {
+                        this.scrollContDiv.scrollLeft += thisMove
+                    }
+                } else {
+                    if (this.scrollContDiv.scrollLeft - thisMove <= 0) {
+                        this.scrollContDiv.scrollLeft = this.listDiv01.scrollWidth + this.scrollContDiv.scrollLeft - thisMove
+                    } else {
+                        this.scrollContDiv.scrollLeft += thisMove
+                    }
+                };
+                num -= thisMove;
+                if (Math.abs(num) == 0) {
+                    _state = "ready";
+                    if (this.autoPlay) {
+                        this.play()
+                    };
+                    this.accountPageIndex();
+                    return
+                } else {
+                    this.accountPageIndex();
+                    setTimeout("ScrollPic.childs[" + this.ID + "].move(" + num + "," + quick + ")", this.speed)
+                }
+            };
+            this.next = function() {
+                if (_state != "ready") {
+                    return
+                };
+                _state = "stoping";
+                this.move(this.pageWidth, true)
+            };
+            this.play = function() {
+                if (!this.autoPlay) {
+                    return
+                };
+                clearInterval(_autoTimeObj);
+                _autoTimeObj = setInterval("ScrollPic.childs[" + this.ID + "].next()", this.autoPlayTime * 1000)
+            };
+            this.stop = function() {
+                clearInterval(_autoTimeObj)
+            };
+            this.pageTo = function(num) {
+                if (_state != "ready") {
+                    return
+                };
+                _state = "stoping";
+                var fill = num * this.frameWidth - this.scrollContDiv.scrollLeft;
+                this.move(fill, true)
+            };
+            this.accountPageIndex = function() {
+                this.pageIndex = Math.round(this.scrollContDiv.scrollLeft / this.frameWidth);
+                if (this.pageIndex > Math.round(this.listDiv01.offsetWidth / this.frameWidth + 0.4) - 1) {
+                    this.pageIndex = 0
+                };
+                var i;
+                for (i = 0; i < this.dotObjArr.length; i++) {
+                    if (i == this.pageIndex) {
+                        this.dotObjArr[i].className = this.dotClassName
+                    } else {
+                        this.dotObjArr[i].className = this.dotOnClassName
+                    }
+                }
+            }
+        };
+    </script>
+
+
+
+
+<script src="<?=__JS__?>/owl.carousel.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.bxslider.min.js"></script>
+<script>
+    var scrollPic_02 = new ScrollPic();
+    scrollPic_02.scrollContId = "nav-all";//存放所有轮播元素的div
+    scrollPic_02.arrLeftId = "last"; //左箭头ID
+    scrollPic_02.arrRightId = "next"; //右箭头ID
+    scrollPic_02.frameWidth = 550; //显示框宽
+    scrollPic_02.pageWidth = 250; //翻页宽度
+    scrollPic_02.speed = 10; //移动速度(毫秒，越小越快)
+    scrollPic_02.space = 20; //每次移动像素(单位px，越大越快)
+    scrollPic_02.autoPlay = false; //自动播放:true|false
+    scrollPic_02.initialize(); //初始化
+    //--><!]]>
+</script>
+<script>
+ //youtube视频
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player',{
+          events: {
+            'onReady': onPlayerReady
+            // 'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+      function clicks()
+      {
+        player.playVideo();
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+      var done = false;
+      function onPlayerStateChange(event) {
+        console.log(event)
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player2.stopVideo();
+    }
+    $(document).ready(function(){
+        $('.video_list .nav-i').on('click',function(){
+            var lisrc = $(this).find(".dv").attr('video_url');
+            $('.con_video>div').find('iframe').attr('src',lisrc);
+            clicks();
+        })
+    })
+</script>
+<script>
+$(document).ready(function(){
+   
+    function Aall(obj,spanbox){
+        var num = -1;
+        var len = null;
+        var timer = null;
+        var oDiv = $(obj);
+        len = oDiv.children('li').length;
+        var oSpan = $(spanbox);
+        
+        function start(){
+            clearTimeout(timer);
+            timer = setTimeout(changeImg,3000);
+        }
+
+        function changeImg(){
+          if(num == len-1){
+              num = 0;
+          }else{
+              num+=1;
+          }
+        
+            oDiv.children('li').eq(num).addClass('on').siblings().removeClass('on');
+            oSpan.children('span').eq(num).addClass('cur').siblings().removeClass('cur');
+            start();
+        
+        }
+
+        setTimeout(start,500);
+    
+        $('.event_img').hover(function(){
+            clearTimeout(timer);
+        },function(){
+            timer=setTimeout(changeImg,1000);
+        });
+        
+        oSpan.children('span').on('click',function(){
+            $(this).addClass('cur').siblings().removeClass('cur');
+            num = $(this).index();
+            oDiv.children('li').eq(num).addClass('on').siblings().removeClass('on');
+        });
+    }
+    Aall('._box1','.spanbox1');
+    Aall('._box2','.spanbox2');
+})
+</script>
+<script>
+    var liWidth = $( ".video_list ul").eq(0).width();
+    var liLen = $( ".video_list ul li").length;
+    var w = liWidth*liLen;
+    // $(".video_list ul").width() = liWidth*liLen;
+    $(".video_list").children('a').eq(0).click(function() {
+      $( ".video_list ul" ).animate({
+        left: "+=48.5%"
+      }, 500);
+    });
+    $( ".video_list" ).children('a').eq(1).click(function() {
+      $( ".video_list ul" ).animate({
+        left: "-=48.5%"
+      }, 500);
+    });
+</script>
+<script>
+$(document).ready(function() {
+//视频
+$('.bxslider').bxSlider();
+//焦点幻灯
+$('.slides').slidesjs({
+    width: 1068,
+    height: 1000,
+    play: {
+        active: true,
+        auto: true,
+        interval: 2000,
+        swap: true
+    }
+});
+//图片滚动
+$("#owl-demo").owlCarousel({
+    items :3,
+    lazyLoad : true,
+    navigation : true
+});
+$(".pos").hover(function(){
+    $(this).children("ul").toggle();
+});
+$(".navbar-toggle").click(function(){
+    $(this).children("i").toggleClass("fa-list-ul");
+});
+//点击选项卡
+var box=$('.game_commanders');
+box.find('.tit_hd>ul>li').on("click",function(){
+    var num = box.find('.tit_hd>ul>li').index(this);
+    $(this).addClass('on').siblings().removeClass('on');
+    box.find('.con_bd .con_item').hide().eq(num).show();
+})
+});
+</script>
+<script src="<?=__LAYER__?>/layer.js"></script>
+<script>
+    ;!function(){
+//加载扩展模块
+layer.config({
+    extend: 'extend/layer.ext.js'
+});
+layer.ready(function(){
+    //使用相册
+    layer.photos({
+        photos: '#owl-demo'
+    });
+});
+}();
+</script>
+<script>
+    function arms(){
+        var bodyW=$(window).width();
+        if( bodyW > 1600 ){
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:13,pnLoop:false});
+        }else if( bodyW > 1439 && bodyW < 1601 ){
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:13,pnLoop:false});
+        }else if( bodyW > 1199 && bodyW < 1440 ){
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:13,pnLoop:false});
+        }else if( bodyW > 990 && bodyW < 1200 ){
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:13,pnLoop:false});
+        }else if( bodyW > 480 && bodyW < 991 ){
+            var bd=$('.picScroll_top .bd'),w=(bd.width()/4-75)/2;
+            bd.find('li').css({marginLeft:w,marginRight:w})
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:5,pnLoop:false});
+        }else{
+            var bd=$('.picScroll_top .bd'),w=(bd.width()/4-49)/2;
+            bd.find('li').css({marginLeft:w,marginRight:w})
+            $(".picScroll_top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"left",vis:5,pnLoop:false});
+        }
+    }
+    arms();
+</script>
+<script type="text/javascript">
+    $("#heroimg img").click(function(){
+        var id = $(this).attr('data');
+        var par = $(this).parent();
+        $("#heroimg li").attr('class','');
+        par.attr('class','on');
+//var id = 1;
+$.ajax({
+    type: "POST",
+    url: "/index/getpeople",
+    data: {'id':id},
+    dataType: "json",
+    success: function(data){
+        if(data['data']['status'] = 200){
+            $("#m_portraits img").remove();
+            $("#m_portraits").html('<img title="'+data['data']['e_name']+'" alt="'+data['data']['e_name']+'"  src="'+data['data']['m_portraits']+'">');
+            $("#int").text(data['data']['int']);
+            $("#str").text(data['data']['str']);
+            $("#lds").text(data['data']['lds']);
+            $("#unit").text(data['data']['unit']);
+            $("#e_name").text(data['data']['e_name']);
+            $("#description").text(data['data']['description']);
+            $("#arm_services").text(data['data']['arm_services']);
+            $("#arm_services_picture").attr('src',data['data']['arm_services_picture']);
+            $("#arm_services_picture1").attr('src',data['data']['arm_services_picture1']);
+            $("#arm_services_picture2").attr('src',data['data']['arm_services_picture2']);
+            $("#arm_services_picture3").attr('src',data['data']['arm_services_picture3']);
+            $("#arm_services_picture4").attr('src',data['data']['arm_services_picture4']);
+        }
+        else{
+            alert('数据错误');
+        }
+//alert(data['data']['id']);
+}
+});
+});
+//})
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('#copy').click(function(){
+            var val = $('#copytext').attr('value');
+            copyCard(val);
+        })
+    })
+    function copyCard(val) {
+        if(typeof(val) == 'undefined') val = $.trim($("#new_card_value").val());
+        try{
+            window.clipboardData.setData("Text",val);
+            layer.msg("copy succeed！");
+        }catch(e){
+            $('#copytext').focus();
+            $('#copytext').select();
+            layer.msg("<?=\YII::t('common','copy_tip')?>");
+        }
+    }
+</script>
+<!--[if lt IE 9]>
+<script src="<?=__JS__?>/respond.js"></script>
+<![endif]-->
+

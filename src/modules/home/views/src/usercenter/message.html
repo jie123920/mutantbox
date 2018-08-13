@@ -1,0 +1,64 @@
+
+    <div class="user_con_bd_box">
+        <div class="user_con_bd system_message_box">
+            <div class="system_message" id="msg_list">
+                <ul>
+                    <?php if($message_list){?>
+                        <?php foreach($message_list as $vo){?>
+                            <li id="msg<?=$vo['id']?>">
+                                <div class="img"><img src="<?=__IMG__?>/logo.png" style="width: 80px;"></div>
+                                <div class="text">
+                                    <?php if($vo['is_read']==1){?>
+
+                                    <?php }?>
+                                    <div class="edit">
+                                        <?=$vo['content']?><a href="javascript:void(0);" class="read_more" style="color:#2c96d2;display:block;text-align:right" data="<?=$vo['id']?>"><?=\YII::t('common','ReadMore')?></a>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    <?php }else{ ?>
+                        <li style="font-size: 16px">
+                            <?=\YII::t('common','noMessage')?>.
+                        </li>
+                    <?php }?>
+                </ul>
+            </div>
+        </div>
+        <div class="load_more"><a href="javascript:void(0);" id="load_message" page="1"><i class="icon iconfont"></i></a></div>
+    </div>
+
+    <script>
+        $("a.read_more").bind("click", function () {
+            var id = $(this).attr("data");
+            $.post("/usercenter/readmore", {msg_id: id}, function (data) {
+                var content = $("#msg" + id + " .edit").html(data.content).hide();
+                content.slideDown();
+                $("#msg" + id + " .msg_title").removeClass("msg_title").addClass("is_read");
+                $(".log_in .item02 span").text(data.message_count);
+            });
+        });
+
+        $("#load_message").bind("click", function () {
+            msg_list_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: false});
+            var page = $(this).attr("page");
+            $.get("/usercenter/message", {p: ++page}, function (data) {
+                layer.close(msg_list_box_index);
+                if (data)
+                {
+                    var new_div = $(data).hide();
+                    $("#load_message").attr("page", page);
+
+                    $("#msg_list").append(new_div);
+                    new_div.fadeIn();
+                }
+                else
+                {
+                    layer.alert("<?=\YII::t('common','NoMessages')?>", {title: false, btn: "", shadeClose: true, shade: false, offset: "auto", time: 2000});
+                }
+            });
+        });
+
+    </script>
+
+

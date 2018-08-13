@@ -1,0 +1,57 @@
+
+    <div class="content sub_main">
+        <div class="sub_main_box">
+            <div class="news_list" id="news_list">
+                <ul>
+                    <?php foreach($article_list as $vo){?>
+                        <li>
+                            <div class="tit">
+                                <h2><a href="<?=$vo['url']?>"><?=$vo['title']?></a></h2>
+                            </div>
+                            <div class="text"><?=$vo['description']?></div>
+                            <div class="read_more"><a href="<?=$vo['url']?>"><?=\YII::t('common','ReadMore')?></a><font><?=$vo['add_time']?> [GMT]</font></div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div class="load_more"><a href="javascript:void(0);" id="load_news" page="1"><i class="icon iconfont"></i></a></div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#load_news").click(function () {
+                new_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: false});
+                var page = $(this).attr("page");
+                $.get("/article/index", {p: ++page}, function (data) {
+                    layer.close(new_box_index);
+                    if (data)
+                    {
+                        var new_div = $(data).hide();
+                        $("#load_news").attr("page", page);
+                        $("#news_list").append(new_div);
+                        new_div.fadeIn();
+                    }
+                    else
+                    {
+                        layer.alert("<?=\YII::t('common','NoArticles')?>", {title: false, btn: "", shadeClose: true, shade:false, offset: "auto", time: 2000});
+                    }
+                });
+            })
+        })
+        jQuery(".slideBox").slide({mainCell: ".bd ul", effect: "fold", autoPlay: true, interTime: 4000});
+        TouchSlide({slideCell: "#focus", titCell: ".hd ul", mainCell: ".bd ul", effect: "leftLoop", autoPlay: true, autoPage: true, interTime: 4000});
+        function fangfa() {
+            var bodyw = $(window).width();
+            if (bodyw > 960) {
+                $('.pc_banner .bd ul,.pc_banner .bd li').width(bodyw)
+                var imgh = $('.pc_banner .bd li img').height();
+                $('.pc_banner .bd ul').height(imgh)
+            }
+        }
+        window.onload = function () {
+            fangfa()
+        };
+        $(window).resize(function () {
+            fangfa()
+        });
+    </script>

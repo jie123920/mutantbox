@@ -1,0 +1,197 @@
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+.x_center{
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.absolute_center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50% , -50%);
+    transform: translate(-50% , -50%);
+}
+
+.container .layer_content .close:hover,
+.container .layer_login_with .login_with,
+.container .layer_register > img,
+.container .container_footer .anniu {
+    cursor: pointer
+}
+.container .container_header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 185px;
+    width: 100%;
+    background: url(../images/herder.png) top left no-repeat;
+}
+
+.container .container_header .logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+}
+
+.container .container_footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.container .container_footer img {
+    vertical-align: bottom;
+}
+
+.container .container_footer .anniu {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+}
+
+.container .layer {
+    width: 530px;
+    height: 550px;
+    background: url(../images/log_img.png);
+    display: none;
+}
+
+.container .layer .layer_content {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.container .layer_content .close {
+    display: none;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background: url(../images/xx.png) top right no-repeat;
+}
+
+
+
+.container .layer_content .layer_login {
+    width: 100%;
+    height: 370px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 100px 75px 0 75px;
+    display: table;
+}
+
+#bgvid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+    z-index: -1;
+    width: auto;
+    min-width: 102.5%;
+    height: auto;
+    min-height: 102.5%;
+
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.container .layer_login ul li {
+    position: relative;
+}
+
+.container .layer_login .login_img,
+.container .layer_login input {
+    float: left;
+}
+
+.container .layer_login .login_img > img {
+    width: 74px;
+    height: 80px;
+    vertical-align: bottom;
+    text-align: center;
+    position: relative;
+    z-index: 80;
+}
+
+.container .layer_login .login_input {
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding-left: 60px;
+}
+
+.container .layer_login .login_input > input {
+    width: 100%;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 16px;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 5px;
+    background: url("../images/input_img.png") top left no-repeat;
+    background-size: 100% 100%;
+    color: rgb(131, 102, 52);
+    position: relative;
+    z-index: 79;
+}
+
+.container .layer_login .login_input > p {
+    width: 80%;
+    position: absolute;
+    bottom: -20px;
+    line-height: 14px;
+    color: #e6e6e6;
+    font-size: 14px;
+    text-align: justify;
+    padding-left: 20px;
+    display: none;
+}
+
+.container .layer_content .layer_login_with {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    top: 370px;
+    left: 0;
+    box-sizing: border-box;
+    padding: 50px 100px 20px 150px;
+
+}
+
+.container .layer_login_with .login_with {
+    display: inline-block;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.container .layer_content .layer_register {
+    width: 100%;
+    height: 80px;
+    position: relative;
+    top: 470px;
+    left: 0;
+    box-sizing: border-box;
+
+}
+

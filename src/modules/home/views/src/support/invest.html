@@ -1,0 +1,159 @@
+<!-- 主体 -->
+<div class="service_main">
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/service.css">
+<style text="text/css">
+dd .input_s01{ position:relative;bottom:-250px; right: -150px; width:159px; height:37px; background:url(<?=__IMG__?>/service_sub.png) top left no-repeat; border:0; cursor:pointer; font-size:20px; color:#fff; font-weight:700; margin-right:8%; display:inline-block; vertical-align:top;}
+#edui6 .edui-box{display: none  !important;}
+</style>
+    <div class="ticket_con">
+        <div class="ticket_r">
+            <div class="ticket_r_box">
+                <div class="position"><a href="/support/index"><?=\YII::t('common','Support')?></a><span>></span><a href="#">Liberators</a></div>
+                <div class="dl_box">
+                    <h3>Liberators VIP Association</h3>
+                    <span>We want to invite you, dear customer, to our brand new Liberators VIP Association. Be among the first to hear of new features and special events in your favorite WW2 browser game! Please fill out the application form with all required information, which will be kept confidential. We will verify your information and send you a formal invitation with the first Bonus Reward within 7 business days.</span>
+                    <form action="<?=__SELF__?>" method="post" id="sub_ticket">
+                    <input type="hidden" value="" id="client" name="client"/>
+                        <input type="hidden" value="" id="oid" name="oid"/>
+                        <dl>
+                            <dt>Game</dt>
+                            <dd class="clearfix">
+                                <select name="game_id" class="select">
+                                    <?php if($game_list){ foreach($game_list as $vo){?>
+                                        <option value="<?=$vo['id']?>"><?=$vo['game_name']?></option>
+                                    <?php }} ?>
+                                </select>
+                            </dd>
+                            <dt>Server<span style="color: red">*</span></dt>
+                            <dd class="clearfix">
+                                <select name="server_id" required class="select">
+                                    <?php if($allServerLists){ foreach($allServerLists as $vo){?>
+                                        <option <?php if($last_enter_server==$vo['server_id']){echo 'selected';}?> value="<?=$vo['server_id']?>"><?=$vo['server_name']?></option>
+                                    <?php }} ?>
+                                </select>
+                            </dd>
+                            <dt>Character Name<span style="color: red">*</span></dt>
+                            <dd class="clearfix">
+                                <input name="game_name" required type="text" class="input_t" value="" placeholder="<?=\YII::t('common','characterServer')?>">
+                            </dd>
+                            <dt>Character ID</dt>
+                            <dd class="clearfix">
+                                Put /id in the world chat to find your character ID<br>
+                                <input name="character_id"  type="text" class="input_t" value="" placeholder="Character ID">
+                            </dd>
+                            <dt>Email<span style="color: red">*</span></dt>
+                            <dd class="clearfix">
+                                <input name="email" required type="text" class="input_t" value="<?=$this->params['user_info']['email']?>" placeholder="<?=$this->params['user_info']['email']?>">
+                            </dd>
+                            <dt>Date of Birth<span style="color: red">*</span></dt>
+                            <dd class="clearfix">
+                                <input name="birth" required type="date" class="input_t" value="" placeholder="">
+                            </dd>
+                            <dt>Preferred Language<span style="color: red">*</span></dt>
+                            <dd class="clearfix">
+                                <select name="prefer_lang" required class="select" id="aa">
+                                    <?php foreach(\YII::$app->params['lang'] as $k=>$vo){?>
+                                    <option value="<?=$k?>"><?=$vo?></option>
+                                    <?php } ?>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </dd>
+                            <div class="rongq" style="display: none">
+                            <dt>Others</dt>
+                            <dd class="clearfix">
+                                If you chose "Others" in the above question, please tell us what language you are comfortable using:<BR>
+                                <input name="other_lang" type="text" class="input_t" value="" placeholder="">
+                            </dd>
+                            </div>
+                            <dt class="kong">&nbsp;</dt>
+                            <dd class="clearfix sub_input">
+                                <input name="" type="submit" value="<?=\YII::t('common','Submit')?>" class="input_s">
+                                <input name="" type="reset" value="<?=\YII::t('common','Reset')?>" class="input_s input_s02">
+                            </dd>
+                        </dl>
+                    </form>
+                </div>
+            </div>      
+        </div>
+    </div>
+    <SCRIPT type = "text/javascript" src = "<?=__STATIC__?>/ueditor/ueditor.config.js" ></SCRIPT>
+    <SCRIPT type="text/javascript" src="<?=__STATIC__?>/ueditor/ueditor.all.js"></SCRIPT>
+    <script>
+        $(".search_box [name='game_id']").on("change", function () {
+            var game_name = $(this).find("option:selected").text();
+            $(this).next(".text").text(game_name);
+        });
+        $("#aa").bind("change",function(){
+            if($(this).val()=="Others"){
+                $(".rongq").css("display","block");
+            }
+        });
+        // 查询对应服务器的角色名
+        $("[name='server_id']").on("change", function () {
+            var server_id = $(this).val();
+            $('input[name="game_name"]').attr('placeholder', '<?=\YII::t('common','Searching')?>').val('');
+            $.post('/support/getusername?r=' + Math.random(), {server_id: server_id}, function(data, textStatus, xhr) {
+                if (data.code == 0) {
+                    $('input[name="game_name"]').val(data.data);
+                    $('input[name="oid"]').val(data.oid);
+                }else{
+                    $('input[name="game_name"]').attr('placeholder', data.msg);
+                }
+            });
+        }).trigger('change');
+
+
+
+        $(function () {
+            $("#sub_ticket [type='reset']").on("click",function(){
+                ue.execCommand('cleardoc');
+            })
+
+            $('#sub_ticket').on("submit", function () {
+                sub_ticket_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).ajaxSubmit({
+                    type: 'post',
+                    dataType: "json",
+                    success: sub_ticket_result
+                });
+                return false;
+            });
+        });
+        function sub_ticket_result(result)
+        {
+            $("#sub_ticket").resetForm();
+            layer.close(sub_ticket_index);
+
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+
+                var div = '<div class="submit_text">'+
+                        '<h2> Liberators VIP Association </h2>'+
+                        '<p>Your application has been submitted. We will verify your information and send you a formal invitation to your email address with the first Bonus Reward within 7 business days.</p>'+
+                        '</div>';
+                $(".ticket_r_box").html(div);
+
+            //点击按钮跳转页面
+            $(".input_s01").eq(0).click(function(){
+                location.href="/game/redirecturl";
+            });
+                $(".input_s01").eq(1).click(function(){
+                    location.href="/support";
+                });
+            }
+        }
+        var c_platform = navigator.platform;
+        var c_appCodeName = navigator.appCodeName;
+        var c_browserLanguage = navigator.browserLanguage;
+        var c_systemLanguage = navigator.systemLanguage;
+        console.log(c_platform);
+        console.log(c_appCodeName);
+        console.log(c_browserLanguage);
+        console.log(c_systemLanguage);
+    </script>
+</div>
+<!-- /主体 -->

@@ -1,0 +1,55 @@
+<div class="sur-bg">
+<div class="sur-contanier">
+    <div class="sur-topwrap">
+        <div class="updown"><a TARGET="_blank" href="https://itunes.apple.com/us/app/survivor-legacy/id1142537176?l=zh&ls=1&mt=8
+" class="i-apple"><img src="<?=__IMG__?>/i-apple.png" alt="" title=""/></a><a TARGET="_blank" href="https://play.google.com/store/apps/details?id=com.mutantbox.survivorlegacy.android
+" class="i-google"><img src="<?=__IMG__?>/i-google.png" alt="" title=""/></a></div>
+        <div class="sur-video"><iframe src="<?=isset($firstvideo['video_url'])?$firstvideo['video_url']:''?>" id="player" width="100%" height="514px" frameborder="0"></iframe></div>
+        <div class="sur-info">
+            <div class="sur-intr">
+                <h1>Survivor Legacy</h1>
+                <p><?=\YII::t('common','game_desc')?>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="sur-news">
+        <h2><?=\YII::t('common','latest_news')?></h2>
+        <h3 class="sur-more"><a href="/news"><?=\YII::t('common','view_all_news')?></a></h3>
+        <ul class="sur-news-list">
+            <?php foreach($newsList as $v):?>
+                <li><a href="/news/<?=$v['id']?>/<?=$v['urltitle']?>"><img width="217" height="123" src="<?php  if(strstr($v['img_source'],'http')){echo $v['img_source'];}else{echo '/Uploads/ArticlePicture/'.$v['img_source'];}?>" alt="<?=$v['title']?>" title="<?=$v['title']?>"/><p><?=$v['title']?></p><time datatime="<?=date("F j Y",$v['create_time'])?>"><?=date("m d Y",$v['create_time'])?></time></a></li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <div class="sur-show-wrap">
+        <h2><?=\YII::t('common','screenshot')?></h2>
+        <div class="sur-show-info">
+            <ul id="sur-img">
+                <?php foreach($sList as $v):?>
+                     <li><a href="javascript:;"><img src="<?=$v['img_url']?>"/></a></li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+        <a href="javascript:;" class="sur-pre"></a>
+        <a href="javascript:;" class="sur-next"></a>
+        <!-- <div class="i-circle"><a href="javascript:;"></a><a class="i-sur"></a><a href="javascript:;"></a></div> -->
+    </div>
+</div>
+</div>
+<script src="<?=__LAYER__?>/layer.js"></script>
+<script>
+    //放大轮播图 玩家截图
+    ;!function(){
+        layer.config({
+            extend: 'extend/layer.ext.js'
+        });
+        layer.ready(function(){
+            //使用相册
+            layer.photos({
+                photos: '#sur-img'
+            });
+        });
+    }();
+</script>
+<script src="<?=__JS__?>/sur-public.js"></script>

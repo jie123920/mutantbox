@@ -1,0 +1,67 @@
+
+    <div class="user_con_bd_box">
+        <div class="user_con_bd">
+            <div class="general update_password">
+                <form action="<?=__SELF__?>" method="post" class="update_pwd_form">
+                    <dl>
+                        <dt><?=\YII::t('common','CurrentPassword')?></dt>
+                        <dd><input name="oldpassword" type="password" class="user_input_text"></dd>
+                        <dt><?=\YII::t('common','NewPassword')?></dt>
+                        <dd><input name="password" type="password" placeholder="<?=\YII::t('common','characters')?>" class="user_input_text" id="password"></dd>
+                        <dt><?=\YII::t('common','ConfirmPassword')?></dt>
+                        <dd class="email"><input name="repassword" type="password" placeholder="<?=\YII::t('common','characters')?>" class="user_input_text"><span></span></dd>
+                        <dt class="hong">&nbsp;</dt>
+                    </dl>
+                    <div class="user_sub">
+                        <input type="hidden" name="id" value="{$user_info.id}">
+                        <input name="" type="submit" value="<?=\YII::t('common','Save')?>" class="user_input_sub">
+                        <input name="" type="button" value="<?=\YII::t('common','Cancel')?>" class="user_input_sub user_input_sub02">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $(".update_pwd_form").validate({
+                errorClass: "red_error",
+                highlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass);
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent());
+                },
+                rules: {
+                    oldpassword: {
+                        rangelength: [6, 20]
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    },
+                    repassword: {
+                        equalTo: "#password"
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "Email already exists."
+                    }
+                },
+                submitHandler: function (form)
+                {
+                    update_pwd_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                    $(form).ajaxSubmit({
+                        success: updatePwdResponse
+                    });
+                }
+            });
+
+            function updatePwdResponse(result)
+            {
+                layer.close(update_pwd_index);
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+        })
+    </script>

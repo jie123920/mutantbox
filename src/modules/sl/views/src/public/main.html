@@ -1,0 +1,883 @@
+<?php
+    use yii\helpers\Html;
+    use yii\helpers\Url;
+?>
+<?php $this->beginPage();?>
+<!-- 头部 -->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en-US" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="renderer" content="webkit">
+<title><?=isset($this->params['meta_title'])?$this->params['meta_title']:'';?></title>
+<meta name="keywords" content="<?=isset($this->params['keyword'])?$this->params['keyword']:'';?>">
+<meta name="description" content="<?=isset($this->params['description'])?$this->params['description']:'';?>">
+<link rel="shortcut icon" href="/favicon.ico" />
+<!--<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>-->
+<!--<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/base.css">-->
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/style.css">
+<!--<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/<?=LANG_SET?>/style_<?=LANG_SET?>.css">-->
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/iconfont.css">
+
+<link href="<?=__CSS__?>/bootstrap.min.css" rel="stylesheet">
+<link href="<?=__CSS__?>/main.css" rel="stylesheet">
+<link rel="stylesheet" href="<?=__CSS__?>/zzsc.css">
+<link rel="stylesheet" href="<?=__CSS__?>/owl.carousel.css">
+<link rel="stylesheet" href="<?=__JS__?>/layer/skin/layer.css">
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/jquery.bxslider.css">
+<link rel="stylesheet" type="text/css" href="<?=__STATIC__?>/jcrop/css/jquery.Jcrop.css">
+
+<link href="<?=__CSS__?>/sur-public.css" rel="stylesheet">
+<link href="<?=__CSS__?>/font-awesome.min.css" rel="stylesheet">
+
+
+<script src="<?=__JS__?>/respond.src.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.cookie.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/layer/layer.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.form.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.validate_<?=LANG_SET?>.js"></script>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<!--<script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+<!--<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>-->
+<![endif]-->
+<!--<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>-->
+<script>
+    document.domain = "<?=\YII::$app->params['COOKIE_DOMAIN']?>";
+
+    var loginFacebookCallback = function(response){
+        console.log("loginFacebookCallback:");
+        console.log(response);
+        $.ajax({
+            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/loginfb",
+            type: 'POST',
+            dataType: 'json',
+            data: {token:response.authResponse.accessToken,app_type:"mutantbox"},
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function(data){
+                if (data.code > 0){
+                    layer_alert(data.error);
+                }
+                else{
+                    location.reload();
+                }
+            }
+        });
+    }
+
+    var loginGoogleCallback = function(authResult){
+        console.log("loginGoogleCallback:");
+        console.log(authResult);
+        $.ajax({
+            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/logingg",
+            type: 'POST',
+            dataType: 'json',
+            data: {code:authResult.code},
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function(data){
+                if (data.code > 0){
+                    layer_alert(data.error);
+                }
+                else{
+                    location.reload();
+                }
+            }
+        });
+    }
+</script>
+<script>
+    function start() {
+        gapi.load('auth2', function () {
+            auth2 = gapi.auth2.init({
+                client_id: '455615275123-gnkurafbvjr751fioggsujmrli55ltu8.apps.googleusercontent.com'
+            })
+        });
+    }
+
+    function open_recharge(){
+        layer.alert('<?=\YII::t('common','rechargeAlert')?>',
+        {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+    }
+
+
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '714278052039214',
+            cookie: true, // This is important, it's not enabled by default
+            version: 'v2.12'
+        });
+    };
+</script>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id))
+            return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=714278052039214";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+</head>
+
+<!--header-->
+<body class="test-match-height test-rows test-responsive  test-margin test-padding sur">
+<header>
+    <div class="header_con fixed" style="z-index:100">
+        <div class="content header transition">
+            <div class="header_box clearfix">
+                <h1 class="logo"><a href="<?=\YII::$app->params['MY_URL']['WEB']?>"><img src="<?=__IMG__?>/logo.png" alt="Mutantbox"></a></h1>
+                <div class="right">
+                    <div class="nav">
+                        <ul class="clearfix">
+                            <li class="item">
+                                <div class="hd"><a href="/"><?=\YII::t('common','Home')?></a></div>
+                            </li>
+                            <li class="item">
+                                <div class="hd"><a href="/news"><?=\YII::t('common','News')?></a></div>
+                            </li>
+                            <!--<li class="item">-->
+                                <!--<div class="hd"><a href="javascript:"><?=\YII::t('common','guide')?></a></div>-->
+                            <!--</li>-->
+                            <li class="item">
+                                <div class="hd"><a href="/community"><?=\YII::t('common','Community')?></a></div>
+                            </li>
+                            <li class="item"><div class="hd"><a href="<?=\YII::$app->params['MY_URL']['WEB']?>support"><?=\YII::t('common','Support')?></a></div></li>
+                        </ul>
+                    </div>
+                    <div class="log_share_lang">
+                        <?php  if($this->params['is_login']){?>
+                        <!-- 登录之后状态 S -->
+                        <div class="log_in">
+                            <ul class="clearfix">
+                                <li class="item01"><a href="<?=\YII::$app->params['MY_URL']['WEB']?>usercenter/index"><img alt="Liberators user center" src="<?=$this->params['user_info']['avatar'] ?: '/Public/src/Common/images/UserAvatar/avatar01_20160305.jpg' ;?>" width="57" height="57"><span><?=$this->params['user_info']['username'];?></span></a></li>
+                                <li class="item02" style='position: relative;'> <a href="<?=\YII::$app->params['MY_URL']['WEB']?>usercenter/message"> <i class="icon iconfont2">&#xe65b;</i> <?php if($this->params['message_count']!=0){?><span><?=$this->params['message_count']?></span><?php }?>
+                                    <div class='header_msg_box'>
+                                        <ul>
+                                            <li style="border:none;"><a href="<?=\YII::$app->params['MY_URL']['WEB']?>usercenter/message"><?=Yii::t('common','System Messages')?></a><i><?=$this->params['ticket_count']?></i></li>
+                                            <li><a href="<?=\YII::$app->params['MY_URL']['WEB']?>support/ticketlist"><?=Yii::t('common','Replied Tickets')?></a><i><?=$this->params['system_msg_count']?></i></li>
+                                        </ul>
+                                    </div>
+                                </a> </li>
+                                <li class="item03"><a href="javascript:showDialog('.logout_layer');"><?=Yii::t('common','Log Out')?></a></li>
+                            </ul>
+                        </div>
+                        <?php }else{ ?>
+                        <!-- 未登录状态 S -->
+                        <div class="log clearfix">
+                            <div class="hd">
+                                <ul>
+                                    <li class="item01"><a href="javascript:showDialog('.login');" class="input_sub"><?=Yii::t('common','login')?></a></li>
+                                    <li class="item02"><a href="javascript:showDialog('.registered')" class="input_sub"><?=Yii::t('common','SignUp')?></a></li>
+                                </ul>
+                            </div>
+                            <div class="bd  clearfix"  style="position: relative;">
+                                <div class="input_sub transition login_user"><span><?=Yii::t('common','login')?></span><!-- header_login -->
+                                    <div class="header_login_box">
+                                        <div class="header_login">
+                                            <div class="login">
+                                                <div class="user_box" style="position: relative;">
+                                                    <form action="<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/login" method="post" class='header_login_form'>
+                                                        <ul>
+                                                            <li>
+                                                                <input id="login_email_input" name="email" type="text" placeholder="<?=Yii::t('common','Email')?>" class="layer_text">
+                                                            </li>
+                                                            <li>
+                                                                <input id="login_pass_input" name="password" type="password" placeholder="<?=Yii::t('common','PasswordPrompt')?>" class="layer_text">
+                                                            </li>
+                                                            <li>
+                                                                <label>
+                                                                    <input name="remeber_time" type="checkbox" value="30" checked>
+                                                                    <span><?=Yii::t('common','Remember Me')?></span></label>
+                                                                <font><a href="javascript:showDialog('#pwd_email');"><?=Yii::t('common','Forgot Password')?></a></font></li>
+                                                            <li>
+                                                                <p>
+                                                                    <input type="submit" value="<?=Yii::t('common','login')?>" class="layer_sub">
+                                                                </p>
+                                                            </li>
+                                                        </ul>
+                                                    </form>
+                                                </div>
+                                                <div class="or"><span><?=Yii::t('common','or')?></span><i></i></div>
+                                                <div class="other_user">
+                                                    <iframe src="<?=UCENTER_URL?>user/login?large=1" style="height:134px; width:310px; border:0" scrolling="no" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="header_layer_v"><div class="v_ico">^</div></div>
+                                    </div>
+                                    <!-- ./header_login -->
+                                </div>
+                                <div class="input_sub transition reg_user"><span><?=Yii::t('common','SignUp')?></span><!-- header_register -->
+                                    <div class="header_register_box" >
+                                        <div class="header_register">
+                                            <div class="registered">
+                                                <div class="user_box">
+                                                    <form action="<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/register" method="post" class="header_reg_form">
+                                                        <ul>
+                                                            <li>
+                                                                <input id="reg_email_input" name="email" type="text" placeholder="<?=Yii::t('common','Email')?>" class="layer_text" id="reg_email">
+                                                            </li>
+                                                            <li>
+                                                                <input id="reg_pass_input" name="password" type="password" id="password" placeholder="<?=Yii::t('common','PasswordPrompt')?>" class="layer_text">
+                                                            </li>
+                                                            <li class="zhuce">
+                                                                <input type="submit" value="<?=Yii::t('common','SignUp')?>" class="layer_sub">
+                                                                <span><?=Yii::t('common','accept')?> <a href="/termsofuse.html"><?=Yii::t('common','terms')?></a> <?=Yii::t('common','playAge')?></span></li>
+                                                            <li>
+                                                                <p><a href="javascript:showDialog('.login')"><?=Yii::t('common','account')?></a></p>
+                                                            </li>
+                                                        </ul>
+                                                    </form>
+                                                </div>
+                                                <div class="or"><span><?=Yii::t('common','or')?></span><i></i></div>
+                                                <div class="other_user">
+                                                    <iframe src="<?=UCENTER_URL?>user/login?large=1" style="height:134px; width:310px; border:0" scrolling="no" frameborder="0"></iframe>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="header_layer_v"><div class="v_ico">^</div></div>
+                                    </div>
+                                    <!-- ./header_register --></div>
+                            </div>
+                        </div>
+                        <div class="share">
+                            <iframe src="<?=UCENTER_URL?>user/login" style="height:30px; width:70px; border:0" scrolling="no" frameborder="0"></iframe>
+                        </div>
+                        <?php }?>
+                        <div class="lang">
+                            <div class="hd"><a href="javascript:"><span><?=\YII::t('common','language')?></span></a><span class="lang_text">Language</span></div>
+                            <div class="bd">
+                                <ul>
+                                    <?php foreach(\YII::$app->params['lang'] as $key=>$v){  ?>
+                                        <li><a onclick="changeLang('<?=$key?>')"  href="javascript:"><span><?=$v?></span></a></li>
+                                    <?php }?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mobile_nav_icon transition">
+                    <div class="box transition"><i class="icon iconfont"></i><i class="icon iconfont"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="banner">
+    <a class="pic01" href="javascript:">
+    <img alt="play Liberators" src="<?=__IMG__?>/banner01.jpg" />
+</a>
+    <a class="pic02" href="javascript:">
+        <img alt="play Liberators" src="<?=__IMG__?>/banner02.jpg" />
+    </a>
+    <a class="pic03" href="javascript:">
+        <img alt="play Liberators" src="<?=__IMG__?>/banner03.jpg" />
+    </a>
+    <a class="pic04" href="javascript:">
+        <img alt="play Liberators" src="<?=__IMG__?>/banner04.jpg" />
+    </a>
+    <a class="pic05" href="javascript:">
+        <img alt="play Liberators" src="<?=__IMG__?>/banner05.jpg" />
+    </a>
+</div>
+
+
+<script>
+    $(function(){
+        $(".click-btn").hover(function(){
+            $(this).find("img").css("display" , "none").eq(1).css("display" , "block");
+        },function(){
+            $(this).find("img").css("display" , "none").eq(0).css("display" , "block")
+        })
+    })
+</script>
+
+<!--./header-->
+
+
+
+<!-- ./头部 -->
+<?php $this->beginBody();?>
+
+
+<?=$content?>
+
+
+<?php $this->endBody();?>
+
+<!-- 底部 -->
+    <div class="footer">
+        <div class="content clearfix">
+            <div class="share">
+                <ul>
+                    <li><a target="_blank" href="https://twitter.com/Survivor_Legacy"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    <li><a target="_blank" href="https://www.facebook.com/Survivor-Legacy-259415687786674/?fref=ts"><i class=" fa fa-facebook" aria-hidden="true"></i></a></li>
+                    <li><a target="_blank" href="https://www.youtube.com/channel/UCnNEKauOgOF0dQAzfkdybmg"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="<?=\YII::$app->params['MY_URL']['WEB']?>termsofuse"><?=\YII::t('common','terms')?></a></li>
+                    <li><a href="<?=\YII::$app->params['MY_URL']['WEB']?>privacypolicy"><?=\YII::t('common','Privacy')?></a></li>
+                    <li><a href="/community"><?=\YII::t('common','Community')?></a></li>
+                    <li><a href="<?=\YII::$app->params['MY_URL']['WEB']?>support"><?=\YII::t('common','Support')?></a></li>
+                    <li><a href="<?=\YII::$app->params['MY_URL']['WEB']?>contact"><?=\YII::t('common','Contact')?></a></li>
+                    <li class="copy">&copy; 2015-<?=date('Y',time())?> Mutant Box Interactive Limited</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layer">
+        <?php  if(!$this->params['is_login']){?>
+            <div class="login dialog_box">
+                <h2><?=\YII::t('common','login')?></h2>
+                <div class="other_user">
+                    <span style="height:25px; display:block;"></span>
+                    <div style="margin-left: 88px;">
+                        <iframe src="<?php echo UCENTER_URL?>user/login?large=1" style="height:134px; width:310px; border:0" scrolling="no" frameborder="0" ></iframe>
+                    </div>
+                </div>
+                <div class="or"><span><?=\YII::t('common','or')?></span><i></i></div>
+                <div class="user_box">
+                    <form action="<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/login" method="post" class='login_form'>
+                        <ul>
+                            <li><input name="email" type="text" placeholder="<?=\YII::t('common','Email')?>" class="layer_text"></li>
+                            <li><input name="password" type="password" placeholder="<?=\YII::t('common','PasswordPrompt')?>" class="layer_text"></li>
+
+                            <li><label><input name="remeber_time" type="checkbox" value="30" checked><span><?=\YII::t('common','Remember Me')?></span></label><font><a href="javascript:showDialog('#pwd_email');"><?=\YII::t('common','Forgot Password')?></a></font></li>
+                            <li><p><input type="submit" value="<?=\YII::t('common','login')?>" class="layer_sub"></p></li>
+                            <li><p><a href="javascript:showDialog('.registered')"><?=\YII::t('common','accountSign')?></a></p></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+
+            <div class="registered dialog_box">
+                <h2><?=\YII::t('common','SignUp')?></h2>
+                <div class="other_user">
+                    <span style="height:25px; display:block;"></span>
+                    <div style="margin-left: 88px;">
+                        <iframe src="<?php echo UCENTER_URL?>user/login?large=1" style="height:134px; width:310px; border:0" scrolling="no" frameborder="0" ></iframe>
+                    </div>
+                </div>
+                <div class="or"><span><?=\YII::t('common','or')?></span><i></i></div>
+                <div class="user_box">
+                    <form action="<?=\YII::$app->params['MY_URL']['WEB']?>/ucenter/register" method="post" class="reg_form">
+                        <ul>
+                            <li><input name="email" type="text" placeholder="<?=\YII::t('common','Email')?>" class="layer_text" id="reg_email"></li>
+                            <li><input name="password" type="password" id="password" placeholder="<?=\YII::t('common','PasswordPrompt')?>" class="layer_text"></li>
+
+                            <li class="zhuce"><input type="submit" value="<?=\YII::t('common','SignUp')?>" class="layer_sub"><span><?=\YII::t('common','accept')?> <a href="/termsofuse.html"><?=\YII::t('common','terms')?></a> <?=\YII::t('common','playAge')?></span></li>
+                            <li><p><a href="javascript:showDialog('.login')"><?=\YII::t('common','account')?></a></p></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+
+       <?php }?>
+
+        <div class="retrieve dialog_box" id="pwd_email">
+            <h2><?=\YII::t('common','Forgot Password')?></h2>
+            <div class="other_user">
+                <p><?=\YII::t('common','EnterEmail')?></p>
+            </div>
+            <div class="user_box">
+                <form action="<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/getpassword" method="post" class="getPad_form1">
+                    <ul>
+                        <li><input name="email" type="text" placeholder="<?=\YII::t('common','Email')?>" class="layer_text"></li>
+                        <li>&nbsp;</li>
+                        <li class="forgot_password"><p><input type="submit" value="<?=\YII::t('common','FindPassword')?>" class="layer_sub"></p></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        
+
+        <?php  if($this->params['is_login']){?>
+            <div class="copy_gift dialog_box">
+                <p style="padding-top:40px;"><?=\YII::t('common','redeemGame')?></p>
+                <p style="padding-top:20px;"><input name="" type="text" value="BYFXYAAADrmYmWex" class="layer_text" disabled="disabled"></p>
+                <p><a href="javascript:;" class="copy_gift_sub"><?=\YII::t('common','ok')?></a></p>
+            </div>
+
+            <div class="exit_tip dialog_box logout_layer">
+            <div class="exit_tipbox">
+                <div class="fl"><span></span></div>
+                <div class="fr"><?=\YII::t('common','wangLogOut')?></div>
+                <div class="sub_box">
+                    <a href="<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/logout" class="sub"><?=\YII::t('common','ok')?></a>
+                    <a href="javascript:layer.closeAll();" class="sub sub02"><?=\YII::t('common','Cancel')?></a>
+                </div>
+            </div>
+        </div>
+        <?php }?>
+
+        <div class="exit_tip dialog_box logout_layer2">
+            <div class="exit_tipbox">
+                <div class="fl"><span></span></div>
+                <div class="fr"><?=\YII::t('common','experienceGame')?>.</div>
+                <div class="sub_box">
+                    <a href="/" class="sub"><?=\YII::t('common','ok')?></a>
+                    <a href="javascript:layer.closeAll();" class="sub sub02"><?=\YII::t('common','Cancel')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="<?=__JS__?>/common.js"></script>
+    <script>
+        $(function () {
+            $(".getPad_form1").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                submitHandler: function (form)
+                {
+
+                }
+            });
+            $(".getPad_form1").submit(function(event) {
+
+                getPwd_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        getPwdResponse(data);
+                    }
+                });
+                return false;
+            });
+
+            function getPwdResponse(result)
+            {
+                layer.close(getPwd_box_index);
+                if (result.error > 0)
+                {
+                    layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+                }
+                else
+                {
+                    layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000, end: function (index) {
+                        location.reload();
+                    }
+                    })
+                }
+            }
+
+            $(".repwd_form").validate({
+                rules: {
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    },
+                    repassword: {
+                        equalTo: "#rep_password"
+                    }
+                },
+                submitHandler: function (form)
+                {
+
+                }
+            });
+            $(".repwd_form").submit(function(event) {
+
+                rePwd_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        rePwdResponse(data);
+                    }
+                });
+                return false;
+            });
+
+            function rePwdResponse(result)
+            {
+                layer.close(rePwd_box_index);
+                if (result.error > 0)
+                {
+                    layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000, end: function (index) {
+                        location.href = "/index/index";
+                    }
+                    });
+                }
+                else
+                {
+                    layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 1000, end: function (index) {
+                        location.href = "/index/index";
+                    }
+                    });
+                }
+            }
+
+            $(".reg_form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkuser",
+                            type: "post",
+                            dataType: "json"
+                        }
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "Email already exists."
+                    }
+                },
+                submitHandler: function (form)
+                {
+                }
+            });
+            $(".reg_form").submit(function(event) {
+
+                reg_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        regBoxResponse(data);
+                    }
+                });
+                return false;
+            });
+
+            $(".header_reg_form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkuser",
+                            type: "post",
+                            dataType: "json"
+                        }
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "Email already exists."
+                    }
+                },
+                submitHandler: function (form)
+                {
+
+                }
+            });
+            $(".header_reg_form").submit(function(event) {
+
+                reg_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        regBoxResponse(data);
+                    }
+                });
+                return false;
+            });;
+
+            $(".login_form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkuser",
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                type: "checked"
+                            }
+                        }
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20],
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkpwd",
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                email: function () {
+                                    return $(".login_form input[name='email']").val();
+                                }
+                            }
+                        }
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "<?=\YII::t('common','emailNotFound')?>"
+                    },
+                    password: {
+                        remote: "<?=\YII::t('common','passwordError')?>"
+                    }
+                },
+                submitHandler: function (form)
+                {
+
+                }
+            });
+            $(".login_form").submit(function(event) {
+
+                logging_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        loginBoxResponse(data);
+                    }
+                });
+                return false;
+            });;
+
+            $(".header_login_form").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkuser",
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                type: "checked"
+                            }
+                        }
+                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20],
+                        remote: {
+                            url: "<?=\YII::$app->params['MY_URL']['WEB']?>ucenter/checkpwd",
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                email: function () {
+                                    return $(".header_login_form input[name='email']").val();
+                                }
+                            }
+                        }
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "<?=\YII::t('common','emailNotFound')?>"
+                    },
+                    password: {
+                        remote: "<?=\YII::t('common','passwordError')?>"
+                    }
+                },
+                submitHandler: function (form)
+                {
+
+                }
+            });
+            $(".header_login_form").submit(function(event) {
+
+                logging_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.7, '#000']});
+                $this = $(this);
+                $.ajax({
+                    url: $($this).attr('action'),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: $($this).serialize(),
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function(data){
+                        loginBoxResponse(data);
+                    }
+                });
+                return false;
+            });;
+        })
+
+        function regBoxResponse(result)
+        {
+            layer.close(reg_box_index);
+            if (result.code > 0)
+            {
+                layer.alert('<?=\YII::t('common','passwordError')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+                location.reload();
+            }
+        }
+
+
+
+        function loginBoxResponse(result)
+        {
+            layer.close(logging_box_index);
+            if (result.code > 0)
+            {
+                layer.alert('<?=\YII::t('common','passwordError')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+                location.reload();
+            }
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        var scrollTop = 0;
+
+        function setscrollTop(){
+            $('.banner a>img').each(function(index, el) {
+                if ($(el).height() > 0) {
+                    scrollTop = $(el).height();
+                    return false;
+                }
+            });
+        }
+
+        function fangfa() {
+            var bodyw = $(window).width();
+            var bodyw = $('body').width();
+            if (bodyw > 960) {
+                $('.pc_banner .bd ul,.pc_banner .bd li').width(bodyw)
+                var imgh = $('.pc_banner .bd li img').height();
+                $('.pc_banner .bd ul').height(imgh);
+                $(".slideBox").slide({mainCell: ".bd ul", effect: "fold", autoPlay: true, interTime: 4000});
+            }
+            else
+            {
+                TouchSlide({slideCell: "#focus", titCell: ".hd ul", mainCell: ".bd ul", effect: "leftLoop", autoPlay: true, autoPage: true, interTime: 4000});
+            }
+            var role_box = $('.role_box .con'), scene_box = $('.scene_box .con');
+            role_box.css({marginTop: -role_box.outerHeight() / 2});
+            scene_box.css({marginTop: -scene_box.outerHeight() / 2});
+        }
+
+        $(window).bind('scroll', function(){
+            var fixedHeight = 307;
+            var bannerHeight = scrollTop;
+            if($(document).scrollTop() + $(window).height() >= ($(window).height() - fixedHeight) / 2 + fixedHeight + bannerHeight) {
+                $('.side-share').css({"display":"block"});
+                $('.side-share').stop().animate({"opacity":1},200);
+            } else {
+                $('.side-share').stop().animate({"opacity":0},200,function(){
+                    $(this).css({"display":"none"});
+                });
+            }
+        })
+
+        $(function () {
+            setscrollTop()
+            fangfa();
+            $(window).resize(function () {
+                setscrollTop();
+                fangfa();
+            });
+        })
+
+        window.onload = function(){
+            (function() {
+                var byRow = $('body').hasClass('test-rows');
+                $('.items-container').each(function () {
+                    $(this).children('.item').matchHeight(byRow);
+                });
+                var h = $('.game_commanders').outerHeight();
+                $('.g_renwu_commanders').height(h - 69);
+
+            })();
+        }
+
+        function changeLang(language){
+            $.cookie('think_language',language,{'path':'/',domain:'<?=\YII::$app->params['COOKIE_DOMAIN']?>'});
+            window.location.reload();
+        }
+    </script>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-69020159-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
+<!-- ./底部 -->
+<?php $this->endPage();?>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="<?=__CSS__?>/ct-style.css" />
+</head>
+<body>
+<div class="title"><?=\YII::t('common','Forgot Payment Password')?></div>
+<form action="#" method="post" accept-charset="utf-8" class="get_form" onsubmit="return false">
+    <div class="con">
+        <div class="list clearboth">
+            <span class="fl name"><?=\YII::t('common','E-mail')?></span>
+            <div class="fr">
+                <div class="clearboth">
+                    <input type="email" name="" class="input email fl" value="<?=$email?>">
+                    <input type="button" class="send fr" value="<?=\YII::t('common','Send')?>" />
+                </div>
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="text" class="input code" name="code" placeholder="<?=\YII::t('common','Confirmation Code')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" class="input pwd1" name="pwd1" placeholder="<?=\YII::t('common','Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" class="input pwd2" name="pwd2" placeholder="<?=\YII::t('common','Confirm Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <button class="but submit_btn"><?=\YII::t('common','Confirm')?></button>
+    </div>
+    <input type="hidden" value="<?=isset($_GET['token'])?$_GET['token']:'';?>" name="token" class="token"/>
+</form>
+
+<div class="tan">
+    <div class="wra">
+        <div class="tan-title"><?=\YII::t('common','System')?></div>
+        <div class="txt msg_content"></div>
+        <div class="tan-but">OK</div>
+    </div>
+</div>
+
+<script type="text/javascript" src="<?=__JS__?>/jquery-1.9.1.min.js"></script>
+<script>
+    var countdown=60;
+    function sendemail(){
+        var obj = $(".send");
+        var email = $('.email ').val();
+        var token = $('.token').val();
+
+        $.post('/ct-ucenter/send-email',{'email':email,'token':token},function (data) {
+            if(data.code === 0){
+                settime(obj);
+            }
+            if(data.message === false){
+                $('.msg_content').html('Send falid');
+            }else{
+                $('.msg_content').html('Success');
+            }
+            $('.tan').show();
+        },'json');
+
+
+    }
+
+    $('.submit_btn').click(function () {
+        var code = $('.code').val();
+        var pwd1 = $('.pwd1').val();
+        var pwd2 = $('.pwd2').val();
+        var token = $('.token').val();
+
+        if(code === ''){
+            alert('input code,Please.');
+            return false;
+        }
+
+        if(pwd1 === '' || pwd2 === ''){
+            alert('input password,Please.');
+            return false;
+        }
+
+        if(token === ''){
+            alert('params error');
+            return false;
+        }
+        $.ajax({
+            type : 'post',
+            url : '/ct-ucenter/get-paypwd',
+            dataType : 'json',
+            data : $('.get_form').serialize(),
+            success : function (data) {
+                if(data.code == 0){
+                    alert('Success');
+                    //location.reload();
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    function settime(obj) { //发送验证码倒计时
+        if (countdown == 0) {
+            obj.attr('disabled',false);
+            //obj.removeattr("disabled");
+            obj.val("发送");
+            countdown = 60;
+            return;
+        } else {
+            obj.attr('disabled',true);
+            obj.val(countdown);
+            countdown--;
+        }
+        setTimeout(function() {
+                settime(obj) }
+            ,1000)
+    }
+    $(function(){
+        $('.con .list .send').click(function(){
+            sendemail();
+        })
+        $('.tan .wra .tan-but').click(function(){
+            $('.tan').hide();
+        })
+
+    })
+</script>
+</body>
+</html>

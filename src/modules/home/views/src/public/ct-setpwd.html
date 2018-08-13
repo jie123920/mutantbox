@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="<?=__CSS__?>/ct-style.css" />
+</head>
+<body>
+<div class="title"><?=\YII::t('common','Set Payment Password')?></div>
+<form action="#" method="post" accept-charset="utf-8" class="set_form" onsubmit="return false">
+    <div class="con">
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" name="password" class="input pwd" placeholder="<?=\YII::t('common','Payment Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" name="confirm_password" class="input pwd2" placeholder="<?=\YII::t('common','Confirm Payment Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <button class="but submit_btn"><?=\YII::t('common','Confirm')?></button>
+    </div>
+    <input type="hidden" value="<?=isset($_GET['token'])?$_GET['token']:'';?>" name="token" class="token"/>
+</form>
+</body>
+</html>
+<script type="text/javascript" src="<?=__JS__?>/jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        $('.submit_btn').click(function () {
+            var pwd1 = $('.pwd1').val();
+            var pwd2 = $('.pwd2').val();
+            var token = $('.token').val();
+
+            if(pwd1 === '' || pwd2 === ''){
+                alert('input password,Please.');
+                return false;
+            }
+
+            if(token === ''){
+                alert('params error');
+                return false;
+            }
+            $.ajax({
+                type : 'post',
+                url : '/ct-ucenter/set-paypwd',
+                dataType : 'json',
+                data : $('.set_form').serialize(),
+                success : function (data) {
+                    if(data.code == 0){
+                        alert('Success');
+                        //location.reload();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+    })
+</script>

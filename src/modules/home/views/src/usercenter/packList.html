@@ -1,0 +1,100 @@
+<extend name="Public/user_base" />
+<block name="head_css">
+    <link rel="stylesheet" type="text/css" href="__CSS__/user.css">
+</block>
+<block name="head_js">
+    <script type="text/javascript" src="__JS__/jquery.validate.min.js"></script>
+</block>
+<block name='focus'></block>
+<block name="body">
+    <div class="user_con_bd_box">
+        <div class="user_con_bd payment_history">
+            <div class="payment">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                                <tr class="tr_item tr_item01">
+                                    <td class="item item01">
+                                        <h2>{$Think.lang.Date} & {$Think.lang.Time}</h2>
+                                        <p>August 5, 2015<br />10:00:00</p>
+                                    </td>
+                                    <td class="item item02">
+                                        <h2>{$Think.lang.Game}</h2>
+                                        <p>Liberators</p>
+                                    </td>
+                                    <td class="item item03">
+                                        <h2>{$Think.lang.Server}</h2>
+                                        <p>S1</p>
+                                    </td>
+                                    <td class="item item04">
+                                        <h2>{$Think.lang.Pack}</h2>
+                                        <p>Bond x1000</p>
+                                    </td>
+                                    <td class="item item05">
+                                        <h2>{$Think.lang.Code}</h2>
+                                        <p>USD 9.99</p>
+                                    </td>
+                                    <td class="item item06">
+                                        <h2>{$Think.lang.Status}</h2>
+                                        <p>xxxxxxx</p>
+                                    </td>
+                                    <td class="item item07">
+                                        <h2>{$Think.lang.Action}</h2>
+                                        <p><a href="javascript:;" class="gift_sub">{$Think.lang.Copy}</a></p>
+                                    </td>
+                                </tr>
+                                <tr class="tr_item tr_item02">
+                                    <td class="item item01">
+                                        <h2>{$Think.lang.Date} & {$Think.lang.Time}</h2>
+                                        <p>August 5, 2015<br />10:00:00</p>
+                                    </td>
+                                    <td class="item item02">
+                                        <h2>{$Think.lang.Game}</h2>
+                                        <p>Liberators</p>
+                                    </td>
+                                    <td class="item item03">
+                                        <h2>{$Think.lang.Server}</h2>
+                                        <p>S1</p>
+                                    </td>
+                                    <td class="item item04">
+                                        <h2>{$Think.lang.Pack}</h2>
+                                        <p>Bond x1000</p>
+                                    </td>
+                                    <td class="item item05">
+                                        <h2>{$Think.lang.Code}</h2>
+                                        <p>USD 9.99</p>
+                                    </td>
+                                    <td class="item item06">
+                                        <h2>{$Think.lang.Status}</h2>
+                                        <p>xxxxxxx</p>
+                                    </td>
+                                    <td class="item item07">
+                                        <h2>{$Think.lang.Action}</h2>
+                                        <p><a href="javascript:;" class="gift_sub">{$Think.lang.Copy}</a></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="common_js">
+    <script type="text/javascript" src="__JS__/common.js"></script>
+</block>
+<block name="page_js">        
+    <script>
+        $('.gift_sub').on("click", function () {
+            showDialog('.copy_gift');
+        });
+        $(".copy_gift_sub").on("click", function () {
+            layer.closeAll();
+        })
+    </script>
+</block>
+
+
+

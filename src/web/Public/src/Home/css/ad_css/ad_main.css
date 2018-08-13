@@ -1,0 +1,323 @@
+@font-face
+{
+    font-family: myFirstFont;
+    src: url('../../fonts/Abadi-MT-Condensed-Extra-Bold.TTF');
+}
+@font-face
+{
+    font-family: zimu;
+    src: url('../../fonts/Hoefler.ttf');
+}
+
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+
+}
+
+.x_center {
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+}
+
+.container .mengceng{
+    position: absolute;
+    cursor: pointer;
+}
+
+.container .container-title{
+    position: relative;
+    top: 75%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+}
+.container .container-title li{
+    line-height: 80px;
+    display: none;
+}
+
+.container .container-title span{
+    font-size: 36px;
+    color: #EAEAEA;
+    font-family: zimu;
+}
+.absolute_center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -o-transform: translateX(-50%) translateY(-50%);
+}
+
+.container .layer_content .close:hover,
+.container .layer_login_with .login_with,
+.container .layer_register > img,
+.container .container_footer .anniu {
+    cursor: pointer
+}
+.container .container_footer .brand{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 12px;
+    color: #949494;
+}
+
+.layer{
+    top: 55%;
+    left: 49%;
+}
+.container .container_header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 185px;
+    width: 100%;
+    background: url(http://cdn.mutantbox.com/00/01/ad_herder.png?v=1.0.0) top left no-repeat;
+}
+
+.container .container_header .logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 20%;
+}
+.container .container_header .logo>img{
+    width: 100%;
+}
+.container .container_footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.container .container_footer img {
+    vertical-align: bottom;
+}
+
+.container .container_footer .anniu {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 50%;
+}
+.container .layer .layer_content {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.container .layer_content .close {
+    display: none;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background: url(http://cdn.mutantbox.com/00/01/xx.png?v=1.0.0) top right no-repeat;
+}
+
+.container .layer_content .layer_login {
+    width: 100%;
+    height: 370px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 100px 75px 0 75px;
+    display: table;
+}
+
+#bgvid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+    z-index: -1;
+    width: auto;
+    min-width: 102.5%;
+    height: auto;
+    min-height: 102.5%;
+    transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -o-transform: translateX(-50%) translateY(-50%);
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.container .layer_login ul li {
+    position: relative;
+}
+
+.container .layer_login .login_img,
+.container .layer_login input {
+    float: left;
+}
+
+.container .layer_login .login_img > img {
+    width: 74px;
+    height: 80px;
+    vertical-align: bottom;
+    text-align: center;
+    position: relative;
+    z-index: 80;
+    visibility: hidden;
+}
+
+.container .layer_login .login_input {
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform:translateY(-50%);
+    -o-transform:translateY(-50%);
+    padding-left: 60px;
+}
+
+.container .layer_login .login_input > input {
+    width: 100%;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 16px;
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 5px;
+    background: url("http://cdn.mutantbox.com/00/01/input_img.png?v=1.0.1") top left no-repeat;
+    background-size: 100% 100%;
+    color: #e5e5e5;
+    position: relative;
+    z-index: 79;
+    opacity: 0.8;
+}
+
+.container .layer_login .login_input > p {
+    width: 80%;
+    position: absolute;
+    bottom: -20px;
+    line-height: 14px;
+    color: #e6e6e6;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+}
+
+.es-es.container .layer_login .login_input > p{
+    bottom: -30px;
+}
+.container .layer_content .layer_login_with {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    top: 400px;
+    left: 0;
+    box-sizing: border-box;
+    padding: 50px 1px 20px 150px;
+
+}
+
+.layer_login_span {
+    position: absolute;
+    bottom: 0;
+    left: 52%;
+    z-index:100;
+    width: 300px;
+    font-family: myFirstFont;
+    font-size: 12px;
+    text-align: center;
+    color: #676a61;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+}
+.layer_login_span a{
+    color: #676a61;
+}
+.container .layer_login_with .layer_login_span > a {
+    color: #7a5029;
+}
+
+.container .layer_login_with .login_with {
+    display: inline-block;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+
+.container .layer_content .layer_register {
+    width: 100%;
+    height: 80px;
+    position: relative;
+    top: 340px;
+    left: 20px;
+    box-sizing: border-box;
+    opacity:0.8;
+}
+.login_fb_google{
+    position: relative;
+    top: -410px;
+    opacity: 0.8;
+}
+.login_fb_google img.login_with_img{
+    position: absolute;
+    top: 18%;
+    left: 0;
+}
+.login_input .zhu{
+    position: absolute;
+    left: 35px;
+    top: 40px;
+    transform: scaleX(0.8);
+}
+.layer_register_loading{
+    visibility: hidden;
+}
+@media screen and (max-width:1680px) {
+    .layer {
+        top: 60%;
+    }
+    .container .layer {
+        width: 500px;
+        height: 500px;
+        background-size: 100% 100%;
+    }
+    .container .layer_content .layer_login {
+        padding: 75px 60px 0 60px;
+    }
+    .container .layer_content .layer_login_with {
+        top: 400px;
+    }
+
+    .container .layer_login_with .login_with img{
+        width: 100%;
+        height: 100%;
+    }
+    .container .layer_content .layer_register {
+        top: 320px;
+    }
+}

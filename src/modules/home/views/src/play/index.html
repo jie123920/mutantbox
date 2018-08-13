@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Mutantbox.com|best strategy games|Mutantbox</title>
+    <script type="text/javascript" src="<?=__JS__?>/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="<?=__JS__?>/layer/layer.js"></script>
+    <script type="text/javascript" src="<?=__JS__?>/main.js"></script>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #play_iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            vertical-align: middle;
+        }
+
+        body {
+            overflow: auto;
+            text-align: center;
+            background-color: #000000;
+        }
+
+        object:focus {
+            outline: none;
+        }
+
+        body, p {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            border: none;
+        }
+
+
+    </style>
+    <script language="javascript">
+        document.domain = '<?=$domain?>';
+        var argv = {};
+
+        $(document).ready(function () {
+            console.log(argv);
+        });
+    </script>
+</head>
+<body>
+
+
+<iframe id="play_iframe" src="<?=$gameUrl?>" scrolling="no" frameborder="0"></iframe>
+
+</body>
+</html>

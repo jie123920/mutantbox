@@ -1,0 +1,102 @@
+<?php if(\yii::$app->request->get('type',1)==1){?>
+<script>
+    var type=1;
+</script>
+    <body class="sur-newswrap">
+    <div class="sur-newsinfo">
+        <h1><?=\YII::t('common','news')?></h1>
+        <div class="sur-newsnav"><a href="?type=1" class="nav-cur"><?=\YII::t('common','full_stories')?></a><a href="?type=2"><?=\YII::t('common','headlines')?></a></div>
+        <ul class="sur-newsbox" id="news_1">
+            <?php foreach($articlerList as $data){?>
+                <li>
+                    <h2><a href="/news/<?=$data['id']?>/<?=$data['urltitle']?>"><?=$data['title']?></a></h2>
+                    <div class="sur-newstime"><time><?=date('Y m d', $data['create_time']);?> [GMT]</time><span><?=$data['name']?></span></div>
+                    <div class="sur-contwrap">
+                        <div class="sur-newsarticle">
+                            <p><?=htmlspecialchars_decode($data['remark'])?></p>
+                        </div>
+                        <div class="sur-newsshare">
+                            <span><?=\YII::t('common','share')?>:</span>
+                            <a href="javascript:void(window.open('http://www.facebook.com/sharer.php?u=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&t='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                            <a href="javascript:void(window.open('http://reddit.com/r/gaming/submit?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&title='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-reddit-alien" aria-hidden="true"></i></a>
+                            <a href="javascript:void(window.open('https://twitter.com/intent/tweet?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&text='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </li>
+            <?php }?>
+        </ul>
+    </div>
+    </body>
+
+
+
+<?php }else{?>
+<script>
+    var type=2;
+</script>
+
+
+    <body class="sur-newswrap">
+    <div class="sur-newsinfo">
+        <h1><?=\YII::t('common','news')?></h1>
+        <div class="sur-newsnav"><a href="?type=1"><?=\YII::t('common','full_stories')?></a><a href="?type=2" class="nav-cur"><?=\YII::t('common','headlines')?></a></div>
+        <ul class="sur-newsbox sur-c" id="news_2">
+            <?php foreach($articlerList as $data){?>
+                <li>
+                        <h2><a href="javascript:"><?=$data['title']?></a></h2>
+                        <div class="sur-newstime"><time><?=date('Y m d', $data['create_time']);?> [GMT]</time><span><?=$data['name']?></span></div>
+
+                        <div class="sur-contwrap">
+                            <div class="sur-newsarticle">
+                                <p><?=htmlspecialchars_decode($data['remark'])?></p>
+                            </div>
+                            <div class="sur-newsshare">
+                                <span><?=\YII::t('common','share')?>:</span>
+                                <a href="javascript:void(window.open('http://www.facebook.com/sharer.php?u=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&t='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                <a href="javascript:void(window.open('http://reddit.com/r/gaming/submit?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&title='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-reddit-alien" aria-hidden="true"></i></a>
+                                <a href="javascript:void(window.open('https://twitter.com/intent/tweet?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].'/news/'.$data['id'].'/'.$data['urltitle'].'&text='.$data['urltitle']?>'),'Share','width=600,height=400')"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                </li>
+            <?php }?>
+        </ul>
+    </div>
+    </body>
+<?php }?>
+
+
+<script src="<?=__JS__?>/sur-public.js"></script>
+<script>
+    //数据加载时期的gif加载图,用于提示用户数据正在加载!
+    var loadDiv = '<div class="loading"><img src="<?=CDN_URL?>/Home/js/layer/skin/default/loading-22.gif" width="60px" height="60px" ></div>';
+    //监听窗口的鼠标滚轮事件
+    var page = 1;
+    var fid = '<?=$fid?>';
+    $(window).scroll(function() {
+        //当滚轮滚动到文档最末位，也就是拉到了最底下
+        if( $(window).scrollTop() == $(document).height() - $(window).height() ) {
+            //避免多次滚轮触发事件造成图片的多次追加，加上此判断
+            if($('.sur-newsinfo .loading').length == 0) {
+                //将图片插入到内部的内容最末位
+                $('.sur-newsinfo').append(loadDiv);
+            }
+            //发送ajax请求获取数据
+            $.ajax({
+                type: "POST",
+                url: "",
+                data:{page:page+1,fid:fid,type:type},
+                success: function(data){
+                    //加载成功,移除用于提示用户的动态gif图片
+                    $('.sur-newsinfo .loading').remove();
+                    //追加后端返回的数据
+                    if(type==1){
+                        $('#news_1').append(data);
+                    }else {
+                        $('#news_2').append(data);
+                    }
+                    page++;
+                }
+            });
+        }
+    });
+</script>/

@@ -1,0 +1,144 @@
+@charset "utf-8";
+
+/* 
+	Name: komatsu
+	Author: 范波
+	Verson: 0.1
+	Date: 2015.08.22
+*/
+.pay_main{ width:100%; max-width:1500px; margin:0px auto 0; background:#f4f4f4; padding-top:90px;}
+.pay_con{ padding:0 8%;}
+.pay_tit{ text-align:center; padding:75px 0 90px;}
+.pay_tit h2{ display:inline-block; vertical-align:top; font-size:32px; font-family:Microsoft Yahei,'微软雅黑'; padding-left:236px;}
+.pay_language{ display:inline-block; vertical-align:top; position:relative; z-index:1;padding-left:18px;}
+.pay_language .hd{ line-height:24px; font-family:arial; text-transform:uppercase; color:#616161; padding:3px 5px; border:1px solid #8f8f8f; cursor:pointer; margin-top:5px;}
+.pay_language .hd img{ vertical-align:top; padding-right:5px;}
+.pay_language .bd{ position:absolute; top:36px; left:0; border:1px solid #8f8f8f; min-width:87px; padding:3px 0; display:none; background:#fff;}
+.pay_language .bd ul li a{ padding:2px 5px; display:block; text-align:left; line-height:24px; font-family:arial; text-transform:uppercase; color:#616161;}
+.pay_language .bd ul li img{ vertical-align:top; padding-right:5px;}
+.pay_language .bd ul li a:hover{ background:#e8e8e8;}
+.pay_language.on .hd{ background:#fff;}
+.pay_language.on .bd{ display:block;}
+.pay_box{ overflow:hidden; padding-bottom:65px;}
+.pay_box .hd{ width:175px; float:left;}
+.pay_box .hd ul{}
+.pay_box .hd ul li{ text-align:center; background:#eee; border-bottom:1px solid #fff; cursor:pointer;}
+.pay_box .hd ul li img{ vertical-align:top;}
+.pay_box .hd ul li.on{ background:#fff;}
+.pay_box .bd{ margin-left:175px; background:#fff; padding:3.5% 5.7%; min-height:255px;}
+.pay_box .server{}
+.pay_box .server ul{ overflow:hidden;}
+.pay_box .server ul li{ float:left; width:30%; margin-right:5%; line-height:33px;}
+.pay_box .server ul li select{ width:100%; font-size:18px; height:33px;}
+.pay_box .server ul li.role_name{ margin-right:0; color:#d62828; font-size:18px;}
+.pay_box .listing{ padding-top:40px;}
+.pay_box .listing .titile{ font-size:26px; color:#474646; margin-bottom:-5px;}
+.pay_box .listing .con{}
+.pay_box .listing .item{ padding-left:5px; width:47%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; margin-right:6%; float:left; margin-top:25px;}
+.pay_box .listing .item:nth-child(2n){ margin-right:0;}
+.pay_box .listing .item h3{ width:180px; height:21px; line-height:21px; background:#000; color:#fff; font-size:14px; text-indent:10px; margin:0 0 -10px -5px; position:relative; z-index:1;}
+.pay_box .listing .item h3 span{ padding-left:17px;}
+.pay_box .listing .item_con{ padding:25px 10px 20px; position:relative; border:1px solid #b6b6b6; border-radius:3px;}
+.shadow{ box-shadow: 3px 3px 6px rgba(120, 120, 120, 0.5);}
+.pay_box .listing .item_con ul{ float:left;}
+.pay_box .listing .item_con li{ float:left; padding-left:25px; position:relative;}
+.pay_box .listing .item_con li:first-child{ padding-left:0;}
+.pay_box .listing .item_con li img{ vertical-align:top;}
+.pay_box .listing .item_con li img.img{ margin:4px 12px 0 0;}
+.pay_box .listing .item_con li span{ position:absolute; font-size:12px; bottom:0; right:-10px;}
+.pay_box .listing .item_con li font,.pay_box .listing .item_con li i{ line-height:34px; font-size:20px; color:#000; font-family:arial;}
+.pay_box .listing .item_con li i{ font-style:normal; color:#cd0000; padding-left:30px;}
+.pay_box .listing .item_con .price{ float:right; text-align:right; padding-top:6px; font-weight:700;}
+.pay_box .listing .item_con .price font{ font-family:arial; font-size:16px; color:#d62828;}
+.pay_box .listing .item_con .price span{ display:block;}
+.pay_box .listing .item_con .gou{ width:33px; height:32px; background:url(../images/gou.png) no-repeat; position:absolute; bottom:-1px; right:-1px; display:none;}
+.pay_box .listing .item_con .best_value{ width:117px; height:52px; background:url(../images/best_value.png) no-repeat; position:absolute; top:-22px; right:-30px;}
+.pay_box .listing .item_con .most_popular{ width:140px; height:64px; background:url(../images/most_popular.png) no-repeat; position:absolute; top:-30px; right:-30px;}
+.pay_box .listing .heng_item{ margin:25px 0 0 0; width:100%;}
+.pay_box .listing .item.on .item_con{ border-width:3px; border-color:#000; padding:23px 8px 18px; box-shadow:none;}
+.pay_box .listing .item.on .item_con .gou{ display:block;}
+.pay_box .bd_text{ font-size:20px; color:#474646; padding-top:45px;}
+.pay_box .bd_sub{ text-align:center; padding-top:55px;}
+/*.pay_box .bd_sub a{ background:url(../images/sub_buttom.png) no-repeat; padding-left:44px; display:inline-block; vertical-align:top; height:45px; line-height:45px; font-size:24px; color:#d62828; font-weight:700; overflow:hidden;}
+.pay_box .bd_sub a span{ background:url(../images/sub_buttom.png) right -45px no-repeat; padding-right:44px; display:block;}*/
+.pay_box .bd_sub a{ background:url(../images/sub_buttom_pay.png) no-repeat; padding-left:44px; display:inline-block; vertical-align:top; height:45px; line-height:45px; font-size:24px; color:#d62828; font-weight:700; overflow:hidden;cursor:default;}
+.pay_box .bd_sub a span{ background:url(../images/sub_buttom_pay.png) right -50px no-repeat; padding-right:44px; display:block;}
+
+.pay_result{ background:#fff; width:68%; margin:0 0 16% 16%; overflow:hidden;}
+.pay_result .box{ padding:5% 7%; text-align:center;}
+.pay_result dl{ display:inline-block; vertical-align:top; text-align:left;}
+.pay_result dl dt{ font-size:40px; position:relative; padding-left:69px; padding-bottom:10%;}
+.pay_result dl dt img{ position:absolute; left:0;}
+.pay_result dl dd{ font-size:18px; color:#010101; padding-left:149px; position:relative; line-height:26px;}
+.pay_result dl dd span{ position:absolute; left:69px;}
+.pay_result .sub{ padding:45px 0 55px;}
+.pay_result .sub a{ padding-left:44px; height:45px; line-height:45px; display:inline-block; vertical-align:top; background:url(../images/sub_buttom_45.png) no-repeat; overflow:hidden;}
+.pay_result .sub a.item{ margin-right:50px;}
+.pay_result .sub span{ font-size:22px; color:#000; padding-right:44px; background:url(../images/sub_buttom_45.png) right -45px no-repeat; display:block; font-weight:700;}
+.pay_result p{ font-size:16px; color:#8c8c8c; line-height:23px;}
+
+
+@media screen and (max-width: 1200px){
+	.pay_box .listing .item_con ul{ float:none; padding-right:100px; overflow:hidden; margin:-5px 0 0 -25px;}
+	.pay_box .listing .item_con .price{ position:absolute; top:25px; right:10px;}
+	.pay_box .listing .item_con li{ padding-top:5px;}
+	.pay_box .listing .item_con li:first-child{ padding-left:25px;}
+	.pay_box .listing .item_con li span{}
+}
+
+@media screen and (max-width: 960px){
+	.pay_con{ padding:0 4%;}
+	.pay_main{ margin-top:0;}
+	.pay_box .hd{ width:auto; float:none;}
+	.pay_box .hd ul{ overflow:hidden;}
+	.pay_box .hd ul li{ float:left;}
+	.pay_box .hd ul li:nth-child(1),.pay_box .hd ul li:nth-child(2){ width:50%;}
+	.pay_box .hd ul li:nth-child(3),.pay_box .hd ul li:nth-child(4),.pay_box .hd ul li:nth-child(5){ width:33.3333%;}
+	.pay_box .bd{ margin-left:0; padding:6% 5.7%;}
+	
+	.pay_result .sub a.item{ margin-right:10%}
+}
+@media screen and (max-width: 760px){
+	.pay_result{ width:84%; margin:0 0 16% 8%;}
+	.pay_result .sub a.item{ margin-right:10%}
+}
+@media screen and (max-width: 640px){
+	.pay_con{ padding:0 2%;}
+	.pay_box .listing{ padding-top:25px;}
+	.pay_box .listing .item{ margin-right:10%;}
+}
+@media screen and (max-width: 580px){
+	.pay_result .sub a{ margin:10px 5%;}
+	.pay_result .sub a.item{ margin-right:5%;}
+	.pay_result dl dd{ word-break:break-all;}
+}
+@media screen and (max-width: 480px){
+	.pay_tit{ padding:35px 0 40px;}
+	.pay_tit h2{ font-size:27px;}
+	.pay_con{ padding:0;}
+	.pay_tit h2{ padding-right:20px;}
+	.pay_box .hd ul li{ width:100%; float:none;}
+	.pay_box .hd ul li:nth-child(1){ width:100%;}
+	.pay_box .hd ul li:nth-child(2),.pay_box .hd ul li:nth-child(3),.pay_box .hd ul li:nth-child(4),.pay_box .hd ul li:nth-child(5){ width:50%; float:left;}
+	.pay_box .server ul li{ width:100%; margin:0; float:none; margin-bottom:10px;}
+	.pay_box .bd_text{ padding-top:7%;}
+	.pay_box .bd_sub{ padding-top:15%;}
+	
+	.pay_result dl dd{ padding-left:69px; margin-bottom:10px;}
+	.pay_result dl dd span{ position:static; display:block;}
+}
+
+.region-select {
+    border: solid 0px #000;  
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    padding-right: 14px;
+    background: url(../images/arrow.png) no-repeat scroll right center transparent;
+	font-size:14px;
+	height:33px;
+	width:100%; 
+	background-color:#f4f4f4;
+
+}
+.region-select::-ms-expand { display: none; }

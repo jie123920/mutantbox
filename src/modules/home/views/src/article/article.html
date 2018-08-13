@@ -1,0 +1,66 @@
+
+<style type="text/css">
+    .news_detail dd .input_s {
+    width: 210px;
+    height: 24px;
+    background: transparent url("<?=__IMG__?>/left.png") no-repeat;
+    border: 5px none;
+    cursor: pointer;
+    font-size: 11px;
+    color: #000;
+    font-weight: 700;
+    margin-right: 8%;
+    margin-left: 60%;
+    display: inline-block;
+    vertical-align: top;
+}.news_detail dd .input_s02 {
+    width: 210px;
+    height: 24px;
+    background: transparent url("<?=__IMG__?>/right.png") no-repeat;
+    border: 0px none;
+    cursor: pointer;
+    font-size: 11px;
+    color: #F00000;
+    font-weight: 700;
+    margin-right: 8%;
+    margin-left: 60%;
+    display: inline-block;
+    vertical-align: top;
+}
+</style>
+    <div class="content sub_main">
+        <div class="sub_main_box">
+            <div class="sub_content" style="margin-top:0;">
+                <div class="news_detail dl_box">
+                    <div class="position"><a href="/index/index"><?=\YII::t('common','Home')?></a>
+                        <?php foreach($arrPids as $v){?>
+                        -> <a href="###"><?=$v['name']?></a>
+                        <?php }?>
+                        <font><?=$article['title']?></font></div>
+                    <div class="detail_box">
+                        <div class="title">
+                            <h2><?=$article['title']?></h2>
+                            <p><?=date("M d, Y",$article['create_time'])?> [GMT]</p>
+                        </div>
+                        <div class="edit"><?=htmlspecialchars_decode($article['remark'])?></div>
+                    </div>
+                        <dd class="clearfix sub_input" style="display:none">
+                            <input style="display:none;" name="" type="button"  value="<?=\YII::t('common','articleHelp')?>" class="input_s02" onClick="location.href='/company/contact'">
+                            <input name="" type="button" value="<?=\YII::t('common','articleHelp')?>" class="input_s" onClick="location.href='/company/contact'">
+                        </dd>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".input_s").mouseenter(function(){
+            $(".input_s02").show();
+            $(".input_s").hide();
+        });
+        $(".input_s").mouseleave(function(){
+            $(".input_s").show();
+            $(".input_s02").hide();
+        });
+    </script>
+

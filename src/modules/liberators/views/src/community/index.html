@@ -1,0 +1,8 @@
+<?php if($this->params['is_login'] == 1){?>
+<script>
+    layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+    setTimeout(function(){
+        window.location.href = "<?=\YII::$app->params['MY_URL']['FORUM']?>";
+    }, 5000)
+</script>
+<?php }?>

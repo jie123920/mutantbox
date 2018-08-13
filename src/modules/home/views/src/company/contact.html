@@ -1,0 +1,71 @@
+    <div class="focus">
+        <a href="<?=\YII::$app->params['MY_URL']['LIBERATORS']?>" class="pic01"><img src="<?=__IMG__?>/<?=\YII::t('common','img_contact-us')?>"></a>
+        <a href="<?=\YII::$app->params['MY_URL']['LIBERATORS']?>" class="pic02"><img src="<?=__IMG__?>/<?=\YII::t('common','img_contact-us')?>"></a>
+        <a href="<?=\YII::$app->params['MY_URL']['LIBERATORS']?>" class="pic03"><img src="<?=__IMG__?>/<?=\YII::t('common','img_contact-us')?>"></a>
+        <a href="<?=\YII::$app->params['MY_URL']['LIBERATORS']?>" class="pic04"><img src="<?=__IMG__?>/<?=\YII::t('common','img_contact-us')?>"></a>
+        <a href="<?=\YII::$app->params['MY_URL']['LIBERATORS']?>" class="pic05"><img src="<?=__IMG__?>/<?=\YII::t('common','img_contact-us')?>"></a>
+    </div>
+    <div class="content sub_main" style="margin-top:-200px;">
+        <div class="sub_main_box" style="background-color:transparent;color: #fff;">
+            <div class="sub_content sub_contact content_box" style="color: #fff;">
+                <div class="con clearfix">
+                    <div class="fl item">
+                        <h2><?=\YII::t('common','VisitForum')?></h2>
+                        <div class="text"><?=\YII::t('common','DiscussTips')?></div>
+                        <div class="GoToSub"><img src="<?=__IMG__?>/icon01.png"><a href="/community/index" style="color: #fff;"><?=\YII::t('common','GoForum')?></a></div>
+                    </div>
+                    <div class="fr item">
+                        <h2><?=\YII::t('common','SupportSection')?></h2>
+                        <div class="text"><?=\YII::t('common','supportStaff')?></div>
+                        <div class="GoToSub"><img src="<?=__IMG__?>/icon02.png"><a href="/support/index" style="color: #fff;"><?=\YII::t('common','GoSupport')?></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sub_main_box" style="background-color: #172533;border: 1px solid rgb(43,52,63);
+    border-bottom: 0;">
+            <div class="sub_content sub_contact clearfix content_box02" style="color: #fff;">
+                <div class="tit" style="color: #fff;"><?=\YII::t('common','BusinessInquiries')?></div>
+                <div class="con" style="color: #fff;"><?=\YII::t('common','mediaMarketing')?><a href="mailto:BD@mutantbox.com">BD@mutantbox.com</a></div>
+            </div>
+        </div>
+        <div class="sub_main_box" style="background-color: #172533;    border: 1px solid rgb(43,52,63);
+    border-top: 0;">
+            <div class="sub_content sub_contact content_box03" style="color: #fff;">
+                <div class="tit"><?=\YII::t('common','MailingAddress')?></div>
+                <div class="con clearfix">
+                    <div class="fl img"><img src="<?=__IMG__?>/map01.png" alt=""></div>
+                    <div class="fr text">
+                        <h2><?=\YII::t('common','UK')?></h2>
+                        <dl>
+                            <dt><?=\YII::t('common','CompanyName')?>:</dt>
+                            <dd>Mutant Box Limited</dd>
+                            <dt><?=\YII::t('common','CompanyID')?>:</dt>
+                            <dd>9792988</dd>
+                            <dt><?=\YII::t('common','Address')?>:</dt>
+                            <dd><?=\YII::t('common','RoadLondon')?></dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="con clearfix">
+                    <div class="fl text">
+                        <h2><?=\YII::t('common','HongKong')?></h2>
+                        <dl>
+                            <dt><?=\YII::t('common','CompanyName')?>:</dt>
+                            <dd>Mutant Box Limited</dd>
+                            <dt><?=\YII::t('common','CompanyID')?>:</dt>
+                            <dd>2280853</dd>
+                            <dt><?=\YII::t('common','Address')?>:</dt>
+                            <dd><?=\YII::t('common','CentralHongKong')?></dd>
+                        </dl>
+                    </div>
+                    <div class="fr img"><img src="<?=__IMG__?>/map02.png" alt=""></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            $('.fl.item,.fr.item').height($('.fl.item').height() > $('.fr.item').height() ? $('.fl.item').height() : $('.fr.item').height());
+        });
+    </script>

@@ -1,0 +1,223 @@
+<?php if($this->params['is_login']){?>
+<script type="text/javascript">
+    var upload_portra_url = "/usercenter/uploadportrait";
+    var crop_portra_url = "/usercenter/cropportrait";
+    var save_portra_url = "/usercenter/ajaxsaveportrait";
+    var domain = '<?php echo $_SERVER['HTTP_HOST'];?>';
+</script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/jquery.Jcrop.js"></script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/avatarCutter.js"></script>
+<style>
+    .avatar_warp{
+        width:430px;
+        height:430px;
+        background: #456d9e;
+    }
+    #avatar_box{overflow: hidden;}
+</style>
+<?php } ?>
+<!-- 主体 -->
+<div class="service_main">
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/service.css">
+<style text="text/css">
+dd .input_s01{ position:relative;bottom:-250px; right: -150px; width:159px; height:37px; background:url(<?=__IMG__?>/service_sub.png) top left no-repeat; border:0; cursor:pointer; font-size:20px; color:#fff; font-weight:700; margin-right:8%; display:inline-block; vertical-align:top;}
+#edui6 .edui-box{display: none  !important;}
+</style>
+    <div class="ticket_con">
+        <div class="ticket_l">
+            <div class="title"><?=\YII::t('common','HotTopics')?> & <?=\YII::t('common','KnownIssues')?></div>
+            <div class="con">
+                <ul>
+                    <?php foreach($topic_list as $v){?>
+                        <li><a href="/faq/details?id=<?=$v['id']?>"><?=$v['title']?></a></li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <div class="ticket_x">
+            <div class="ticket_x_box">
+                <?php
+                    $game_name = '';
+                    if($game_list) {
+                        foreach($game_list as $k => $v){
+                            if($v['id'] == $game_id){
+                                $game_name = $v['game_name'];
+                            }
+                        }
+                    }
+                ?>
+                <div class="position"><a href="/support/index"><?=\YII::t('common','Support')?></a><span>></span><a href="#"><?=$game_name?></a></div>
+                <div class="dl_box">
+                    <h3><?=\YII::t('common','searchOur')?> <a href="/support/index"><?=\YII::t('common','FAQs')?></a> <?=\YII::t('common','forumReply')?></h3>
+                    <form action="<?=__SELF__?>" method="post" id="sub_ticket">
+                    <input type="hidden" value="" id="client" name="client"/>
+                        <dl>
+                            <dt><?=\YII::t('common','Game')?></dt>
+                            <dd class="clearfix">
+                                <!-- <select name="game_id" class="select">
+                                    <?php if($game_list){ foreach($game_list as $vo){?>
+                                        <option value="<?=$vo['id']?>"><?=$vo['game_name']?></option>
+                                    <?php }} ?>
+                                </select> -->
+                                <select name="game_id" class="select">
+                                <?php foreach($game_list as $vo){?>
+                                <?php 
+                                $select_str = '';
+                                if($game_id == $vo['id']) { 
+                                $checked_game_name = $vo['game_name'];
+                                $select_str = 'selected=selected';
+                                }
+                                ?>
+                                <option value="<?=$vo['id']?>" <?=$select_str; ?>><?=$vo['game_name']?></option>
+                                <?php }?>
+                                </select>
+                            </dd>
+                            <dt><?=\YII::t('common','Server')?></dt>
+                            <dd class="clearfix">
+                                <select name="server_id" class="select">
+                                    <?php if($allServerLists){ foreach($allServerLists as $vo){?>
+                                        <option <?php if($last_enter_server==$vo['server_id']){echo 'selected';}?> value="<?=$vo['server_id']?>"><?=$vo['server_name']?></option>
+                                    <?php }} ?>
+                                </select>
+                            </dd>
+                            <dt><?=\YII::t('common','InGameName')?></dt>
+                            <dd class="clearfix">
+                                <input name="game_name" type="text" class="input_t" value="" placeholder="<?=\YII::t('common','characterServer')?>">
+                            </dd>
+                            <dt><?=\YII::t('common','Email')?></dt>
+                            <dd class="clearfix">
+                                <input required name="email" type="text" class="input_t" value="<?=$this->params['user_info']['email']?>" placeholder="<?=$this->params['user_info']['email']?>">
+                            </dd>
+                            <dt><?=\YII::t('common','Topic')?></dt>
+                            <dd class="clearfix">
+                                <select name="topic_id" class="select">
+                                    <?php foreach($topic_List as $v){?>
+                                        <option value="<?=$v['id']?>"><?=$v['topic_title']?></option>
+                                    <?php } ?>
+                                </select>
+                            </dd>
+                            <dt><?=\YII::t('common','Subject')?></dt>
+                            <dd class="clearfix">
+                                <input required name="subject" type="text" class="input_t">
+                            </dd>
+                            <dt><?=\YII::t('common','Description')?></dt>
+                            <dd class="clearfix">
+                                <div><?=\YII::t('common','use english tip')?></div>
+                                <textarea required id="descrption_con" name="descrption"></textarea>
+                            </dd>
+                            <dt class="kong">&nbsp;</dt>
+                            <dd class="clearfix sub_input">
+                                <input name="" type="submit" value="<?=\YII::t('common','Submit')?>" class="input_s">
+                                <input name="" type="reset" value="<?=\YII::t('common','Reset')?>" class="input_s input_s02">
+                            </dd>
+                            <dd><?=\YII::t('common','reach us')?></dd>
+                        </dl>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <SCRIPT type = "text/javascript" src = "<?=__STATIC__?>/ueditor/ueditor.config.js" ></SCRIPT>
+    <SCRIPT type="text/javascript" src="<?=__STATIC__?>/ueditor/ueditor.all.js"></SCRIPT>
+    <script>
+        $(".dl_box [name='game_id']").on("change", function () {
+            var game_name = $(this).find("option:selected").text();
+            $(this).next(".text").text(game_name);
+            window.location="/support/ticket?game_id=" + this.value;
+        });
+        // 查询对应服务器的角色名
+        $("[name='server_id']").on("change", function () {
+            var server_id = $(this).val();
+            var game_id = $(".dl_box [name='game_id']").find("option:selected").val();
+            $('input[name="game_name"]').attr('placeholder', '<?=\YII::t('common','Searching')?>').val('');
+            $.post('/support/getusername?r=' + Math.random(), {server_id: server_id, game_id:game_id}, function(data, textStatus, xhr) {
+                if (data.code == 0) {
+                    $('input[name="game_name"]').val(data.data);
+                }else{
+                    $('input[name="game_name"]').attr('placeholder', data.msg);
+                }
+            });
+        }).trigger('change');
+
+
+
+        $(function () {
+            $("#sub_ticket [type='reset']").on("click",function(){
+                ue.execCommand('cleardoc');
+            })
+
+            $('#sub_ticket').on("submit", function () {
+                sub_ticket_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shade: [0.3, '#000']});
+                $(this).ajaxSubmit({
+                    type: 'post',
+                    dataType: "json",
+                    success: sub_ticket_result
+                });
+                return false;
+            });
+
+
+
+            var ue = UE.getEditor('descrption_con', {
+                toolbars: [
+                    [
+                        'undo', //撤销
+                        'redo', //重做
+                        'simpleupload', //单图上传
+                        'drafts'// 从草稿箱加载
+                    ]
+                ],
+                zIndex: 9,
+                wordCount:false,
+                maximumWords:3000,
+                elementPathEnabled: false,
+                theme: "default", //皮肤
+                lang: "en", //语言
+                autoWidthEnabled: true,
+                initialFrameHeight: 300,
+                serverUrl: "/Public/src/static/ueditor/php/controller.php"
+            });
+        });
+        function sub_ticket_result(result)
+        {
+            $("#sub_ticket").resetForm();
+            layer.close(sub_ticket_index);
+
+            if (result.error > 0)
+            {
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+            else
+            {
+
+                var div = '<div class="submit_text">'+
+                        '<h2> <?=\YII::t('common','ThankSent')?>! </h2>'+
+                        '<p> <?=\YII::t('common','receivedTicket')?></p>'+
+                        '</div>'+
+                        '<dd class="clearfix sub_input">'+
+                            '<input onClick="locationopen(\"/company/contact\")" type="submit" value="<?=\YII::t('common','playGame')?>" class="input_s01">'+
+                            '<input onClick="locationopen(\"/company/contact\")" type="reset" value="<?=\YII::t('common','back')?>" class="input_s01">'+
+                        '</dd>';
+                $(".ticket_x_box").html(div);
+
+            //点击按钮跳转页面
+            $(".input_s01").eq(0).click(function(){
+                location.href="/game/redirecturl?game_id=<?=$game_id?>";
+            });
+                $(".input_s01").eq(1).click(function(){
+                    location.href="/support/index?game_id=<?=$game_id?>";
+                });
+            }
+        }
+        var c_platform = navigator.platform;
+        var c_appCodeName = navigator.appCodeName;
+        var c_browserLanguage = navigator.browserLanguage;
+        var c_systemLanguage = navigator.systemLanguage;
+        console.log(c_platform);
+        console.log(c_appCodeName);
+        console.log(c_browserLanguage);
+        console.log(c_systemLanguage);
+    </script>
+</div>
+<!-- /主体 -->

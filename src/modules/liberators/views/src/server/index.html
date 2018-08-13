@@ -1,0 +1,241 @@
+<?php
+use app\Library\gameapi\Play;
+use yii\helpers\Url;
+?>
+<style type="text/css">
+  .nav-tabs>li>a, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover{ color: #fff;}
+  .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{color: #ffdf4c;background: #655f51 !important;}
+  .nav-tabs{background:rgba(51,48,34,.5);margin-top:25px;}
+  .nav-tabs>li>a:hover{color: #ffdf4c;text-decoration: underline;}
+  .tab-content{background:rgba(51,48,34,.5);}
+  .tab-content>.active{
+    background: #655f51;
+  }
+  ul::-webkit-scrollbar {
+    width:8px;
+  }
+
+  ul::-webkit-scrollbar-track     {
+    background:rgb(222, 209, 209);
+  }
+
+  ul::-webkit-scrollbar-thumb{
+    background:rgba(153, 153, 153, 1);
+  }
+  span#load_all_server {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    font-size: 16px;
+    text-transform: none;
+    cursor: pointer;
+  }
+  span#load_all_server:hover{
+    text-decoration: underline;
+  }
+  .row.items-container.service_t ul{
+   max-height: 195px;
+   overflow: auto;
+ }
+ .row.items-container.service_t ul li a{
+   vertical-align: sub;
+ }
+     
+</style>
+    <div class="container" id="servicedetail">
+      <div class="row items-container service_t">
+        <div class="col-sm-6 item" >
+          <h1 style="position: relative;"><?=\YII::t('common','YourServers')?><?php if ($isLogined): ?>
+            <span id="load_all_server"><?=\YII::t('common','SeeMore');?></span>
+          <?php endif ?></h1>
+          <ul id="my_server_list">
+            <?php if ($isLogined): ?>
+              <?php if ($myServiceLists): ?>
+                <?php foreach ($myServiceLists as $item): ?>
+                  <li style="width:100%">
+                    <?php if (isset($item['server_status'])): ?>
+                      <?php if ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']): ?>
+                        <i class="iconfont3 open"></i>
+                        <a href="<?=isset($item['server_id']) ? \yii::$app->params['MY_URL']['WEB'] . "play/index?server_id=" . $item['server_id'] : 'javascript:;';?>">
+                          <span><?=isset($item['server_name']) ? $item['server_name'] : '---';?></span>
+                          <span><?=isset($item['game_user_info']['name']) ? $item['game_user_info']['name'] : '---';?></span>
+                          <span><?=isset($item['game_user_info']['level']) ? 'Lv.' . $item['game_user_info']['level'] : '---';?></span>
+                        </a>
+                      <?php else: ?>
+                        <i class="iconfont3 hammer"></i>
+                        <a href="javascript:layer_alert('<?=\YII::t('common','Maintenance')?>', 4);">
+                          <span><?=$item['server_name'];?></span>
+                          <span>(<?=\YII::t('common','Maintenance')?>)</span>
+                          <span>(<?=\YII::t('common','Maintenance')?>)</span>
+                        </a>
+                      <?php endif ?>
+                    <?php else: ?>
+                      <a href="'javascript:;';?>">
+                        <em>---</em>
+                        <em>---</em>
+                        <em>---</em>
+                      </a>
+                    <?php endif ?>
+                  </li>
+                <?php endforeach ?>
+              <?php else: ?>
+                <li style="width:100%"><i class="iconfont3 open"></i><a href="javascript:;"><span>---</span><span>---</span><span>---</span></a></li>
+              <?php endif ?>
+            <?php else: ?>
+              <li style="width:100%"><i class="iconfont3 open"></i><a href="javascript:playGame()"><span>---</span><span>---</span><span>---</span></a></li>
+            <?php endif ?>
+          </ul>
+        </div>
+        <div class="col-sm-6 item">
+          <h1><?=\YII::t('common','RecommendedServers')?></h1>
+          <ul>
+            <?php if ($recommendedServerList): ?>
+              <?php foreach ($recommendedServerList as $item): ?>
+                <?php
+                $className = 'fire';
+                if ($isLogined) {
+                  if ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']) {
+                    $url = \yii::$app->params['MY_URL']['WEB'] . "play/index?server_id=" . $item['server_id'];
+                  }else{
+                    $url = "javascript:var dateObj = new Date(" . $item['first_opentime'] . "000);var date = dateObj.getFullYear() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getDate(); var time = ('0' + dateObj.getHours()).substring(('0' + dateObj.getHours()).length-2, ('0' + dateObj.getHours()).length) + ':' + ('0' + dateObj.getMinutes()).substring(('0' + dateObj.getMinutes()).length-2, ('0' + dateObj.getMinutes()).length);layer_alert('".sprintf(\YII::t('common','ServerOpenNotice'),'\'+date+\'','\'+time+\'')."', 4);";
+                    $className = 'door';
+                  }
+                }else{
+                  $url = 'javascript:playGame();';
+                  if ($item['server_status'] != Play::$OPEN_STATE['OPENING']['value']) {
+                    $className = 'door';
+                  }
+                }
+                ?>
+                <li style="float: left;width: 49%;">
+                  <i class="iconfont3 <?=$className;?>" style="margin-right: 10px;"></i>
+                  <a href="<?=$url;?>">
+                    <span><?=$item['server_name'];?>(<?=\app\helpers\myhelper::getZoneName(['sity' => $item['timezone']]);?>)</span>
+                  </a>
+                </li>
+              <?php endforeach ?>
+            <?php else: ?>
+              <li><i class="iconfont3 fire"  style="margin-right: 10px;"></i><a style='cursor: default;text-decoration: none;'><span><?=\YII::t('common','comingSoon')?></span></a></li>
+            <?php endif ?>
+            <div class="clear"></div>
+          </ul>
+        </div>
+      </div>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist" id="myTabs">
+        <li role="presentation" class="active"><a href="#EUROPE" aria-controls="messages" role="tab" data-toggle="tab"><?=\YII::t('common','Europe')?></a></li>
+        <li role="presentation"><a href="#US_WEST" aria-controls="home" role="tab" data-toggle="tab"><?=\YII::t('common','UsWest')?></a></li>
+        <li role="presentation"><a href="#US_EAST" aria-controls="profile" role="tab" data-toggle="tab"><?=\YII::t('common','UsEast')?></a></li>
+        <!--<li role="presentation"><a href="#OCEANIA" aria-controls="settings" role="tab" data-toggle="tab"><?=\YII::t('common','Oceania')?></a></li>-->
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <?php $i=0;?>
+        <?php foreach ($areas as $key => $area){?>
+        <?php $i++;?>
+          <div role="tabpanel" class="tab-pane <?=$i == 1 ? 'active' : '';?>" id="<?=$area;?>">
+          <div class="row">
+            <?php if ($areaServerList[$area]){?>
+              <?php $hasHot = false;?>
+              <?php foreach ($areaServerList[$area] as $item){?>
+                <a href="<?php 
+                  if ($isLogined) {
+                      if ($item['server_status'] == Play::$OPEN_STATE['MAINTAINING']['value']) {
+                        echo 'javascript:layer_alert(\'' . \YII::t('common','Maintenance') . '\', 4);';
+                      }elseif ($item['server_status'] == Play::$OPEN_STATE['OPENING']['value']) {
+                        echo \yii::$app->params['MY_URL']['WEB'] . "play/index?server_id=" . $item['server_id'];
+                      }else{
+                        echo "javascript:var dateObj = new Date(" . $item['first_opentime'] . "000);var date = dateObj.getFullYear() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getDate(); var time = ('0' + dateObj.getHours()).substring(('0' + dateObj.getHours()).length-2, ('0' + dateObj.getHours()).length) + ':' + ('0' + dateObj.getMinutes()).substring(('0' + dateObj.getMinutes()).length-2, ('0' + dateObj.getMinutes()).length);layer_alert('".sprintf(\YII::t('common','ServerOpenNotice'),'\'+date+\'','\'+time+\'')."', 4);";
+                      }
+                  }else{
+                    echo 'javascript:playGame()';
+                  }
+                  ?>" class="col-lg-2 col-sm-3 col-xs-6">
+                  <i class="iconfont3 <?php
+                  switch ($item['server_status']) {
+                    case Play::$OPEN_STATE['OPENING']['value']:
+                    if ($item['force_style'] == Play::$FORCE_STYLE['NORMAL']['value']) {
+                      echo 'right';
+                      break;
+                    }elseif ($item['force_style'] == Play::$FORCE_STYLE['HOT']['value']) {
+                      echo 'fire';
+                      break;
+                    }
+                    if ($hasHot) {
+                      echo 'right';
+                    }else{
+                      $hasHot = true;
+                      echo 'fire';
+                    }
+                    break;
+
+                    case Play::$OPEN_STATE['MAINTAINING']['value']:
+                    echo 'hammer';
+                    break;
+
+                    default: // 待开服
+                    echo 'door';
+                    break;
+                  }
+                  ;?>"></i>
+                <?=$item['server_name'];?></a>
+              <?php } ?>
+            <?php }else{ ?>
+              <a style='cursor: default;text-decoration: none;' class="col-lg-2 col-sm-3 col-xs-6"><i class="iconfont3 fire"></i><?=\YII::t('common','comingSoon')?></a>
+            <?php } ?>
+            <div class="clear"></div>
+          </div>
+          <div class="row intro_last">
+            <dl>
+              <span><i class="iconfont3 open"></i><?=\YII::t('common','LoggedIn')?></span>
+              <span><i class="iconfont3 fire"></i><?=\YII::t('common','hot')?></span>
+              <span><i class="iconfont3 right"></i><?=\YII::t('common','Online')?></span>
+              <span><i class="iconfont3 door"></i><?=\YII::t('common','OpenSoon')?></span>
+              <span><i class="iconfont3 hammer"></i><?=\YII::t('common','Maintenance')?></span>
+            </dl>
+          </div>
+        </div>
+        <?php } ?>
+      </div>
+    </div>
+    <div class="pages container" style="display:none"> <a class="" href="#"> <span class="fa-stack fa-lg"> <i class="fa fa-long-arrow-down fa-stack-1x"></i> <i class="fa fa-chevron-down fa-stack-lg"></i> </span> </a> </div>
+
+<!-- 尾部引入 -->
+<script src="<?=__JS__?>/bootstrap.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.matchHeight.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.slides.min.js"></script>
+<script>
+  $.fn.scrollUnique = function() {
+    return $(this).each(function() {
+      var eventType = 'mousewheel';
+      if (document.mozHidden !== undefined) {
+        eventType = 'DOMMouseScroll';
+      }
+      $(this).on(eventType, function(event) {
+        var scrollTop = this.scrollTop,
+        scrollHeight = this.scrollHeight,
+        height = this.clientHeight;
+        var delta = (event.originalEvent.wheelDelta) ? event.originalEvent.wheelDelta : -(event.originalEvent.detail || 0);
+        if ((delta > 0 && scrollTop <= delta) || (delta < 0 && scrollHeight - height - scrollTop <= -1 * delta)) {
+          this.scrollTop = delta > 0? 0: scrollHeight;
+          event.preventDefault();
+        }
+      });
+    });
+  };
+  $('#my_server_list').scrollUnique();
+  var loading_all_server = false;
+  $('#load_all_server').click(function(event) {
+    if (loading_all_server) {
+      return true;
+    }
+    loading_all_server = true;
+    var index = layer.msg('Loading...', {icon: 16, time: 0, shadeClose: false, shade: [0.7, '#000']});;
+    $.get('<?=Url::to(['server/get-all-server'])?>', function(data) {
+      loading_all_server = false;
+      layer.close(index)
+      $('#my_server_list').html(data);
+      $('#load_all_server').hide();
+    });
+  });
+</script>

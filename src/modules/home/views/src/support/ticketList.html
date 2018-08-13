@@ -1,0 +1,178 @@
+    <link rel="stylesheet" type="text/css" href="<?=__CSS__?>/service.css">
+    <style type="text/css">
+        .list_con{ background:#f8f8f8; padding:0 0 6.6%; margin-top:1.4%; font-size:16px; line-height:28px; text-align:center;}
+        .list_con .hd{}
+        .list_con .hd ul{ overflow:hidden;}
+        .list_con .hd li{text-align: left; width:40%; float:left; background:#f4f3f3; font-size:40px; color:#7c7c7c; line-height:1.2; padding:3% 5%; float: left; text-transform: uppercase; cursor:pointer;}
+        .list_con .hd li.on{ background:#f8f8f8; color:#d62828;}
+        .list_con .bd{ padding:0 3.3%;}
+        .list_con .bd .list_table{ display:none;}
+        .list_con .bd .list_table.on{ display:block;}
+        .list_con table{ background:#fff;}
+        .list_con .tr_item h2{ display:none; width: 251px; height:32px;}
+        .list_con .tr_item01 h2{ display:block; width: 251px; height:32px;}
+        .list_con .tr_item .item{ vertical-align:top;}
+        .list_con .tr_item h2{ background:#f4f3f3; padding:21px 15px; text-transform:uppercase; white-space:nowrap; width: 251px; height:32px;}
+        .list_con .tr_item p{ padding:15px; width: 251px; height:32px;}
+        .list_con table td.th{ font-weight: bold; line-height: 50px; font-size:20px;}
+        .list_con table td{cursor: pointer;}
+        .list_con table{color:rgb(255,253,255);}
+        .list_con table td{vertical-align:middle!important;}
+        .ss thead td{
+            border-right: 1px solid #0f1418;
+        }
+        tbody tr:nth-of-type(even){
+            background-color:#243443;
+        }
+        tbody tr:nth-of-type(odd){
+            background-color:#182633;
+        }
+        .edui-default .edui-editor{border:none!important;}
+    </style>
+        <div class="service_main">
+            <div class="search_box" style="margin-bottom: 50px;">
+                <div class="select">
+                    <select name="game_id">
+                        <?php foreach($game_list as $vo){?>
+                             <option value="<?=$vo['id']?>"><?=$vo['game_name']?></option>
+                        <?php } ?>
+                    </select>
+                    <div class="text"><?=$vo['game_name']?></div>
+                </div>
+                <div class="search">
+                    <input type="text" class="input_text" name="keyword">
+                    <a class="search_btn"  href="javascript:void(0);"><?=\YII::t('common','search')?></a>
+                    <div class='search_associated' style="display: none;">
+                        <ul>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    <div class="search_box">
+        <div class="list_con" style="background: #182633;">
+            <div class="hd">
+                <ul>
+                    <li class="on" style="background: #182633;color:#2d99d7;text-decoration:underline;font-size: 42px"><?=\YII::t('common','MyTickets')?></li>
+                </ul>
+            </div>
+            <div class="bd">
+                <div class="list_table on" >
+                    <table id="list_table" width="100%" border="0" cellspacing="0" cellpadding="0" >
+                        <thead>
+                        <tr class="ss" style="background: #191e22;color:#2b99d7">
+                            <td class="th"><?=\YII::t('common','TicketId')?></td>
+                            <td class="th"><?=\YII::t('common','Subject')?></td>
+                            <td class="th"><?=\YII::t('common','Description')?></td>
+                            <td class="th"><?=\YII::t('common','Status')?></td>
+                            <td class="th"><?=\YII::t('common','LastUpdate')?></td>
+                        </tr>
+                        </thead>
+                        <?php if(!empty($ticket_list)){?>
+                        <?php $i=1;?>
+                            <?php foreach($ticket_list as $vo){?>
+                                <tr onclick="window.open('/support/ticketinfo?id=<?=$vo['id']?>');" class="tr_item tr_item0<?=$i?>">
+                                    <td class="item item01">
+                                        <?=$vo['forum_id']?>
+                                    </td>
+                                    <td class="item item02">
+                                        <?=$vo['subject']?>
+                                    </td>
+                                    <td class="item item03">
+                                        <?=$vo['content']?>
+                                    </td>
+                                    <td class="item item04">
+                                        <?=$vo['status']?>
+                                    </td>
+                                    <td class="item item05">
+                                        <?=$vo['add_time']?><br><?=$vo['time']?>
+                                    </td>
+                                </tr>
+                            <?php $i++;}?>
+                            <?php }else{ ?>
+                            <tr style=""><td colspan="5"><?=\YII::t('common','NoData')?></td></tr>
+                        <?php } ?>
+                    </table>
+                    <?php if(!empty($ticket_list)){?>
+                        <div class="load_more"><a href="javascript:void(0)"><i class="icon iconfont"></i></a></div>
+                    <?php } ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        var fouce = false;
+        search_related_url = "/support/searchrelated";
+        $(".search .search_btn").on("click", function () {
+            var keyword = $(".search [name='keyword']").val();
+            if(!keyword){
+                layer.alert('<?=\YII::t('common','EmptyKeywords')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000})
+                return false;
+            }
+            location.href = "/faq/faqlist?keyword=" + keyword
+        })
+
+
+        $(function(){
+            $(document).keydown(function(event){
+                if(event.keyCode==13&&fouce){
+                    var keyword = $(".search [name='keyword']").val();
+                    if(!keyword){
+                        layer.alert('<?=\YII::t('common','EmptyKeywords')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+                        return false;
+                    }
+                    location.href = "/faq/faqlist?keyword=" + keyword + "')}"
+                }
+            });
+        });
+
+
+//        $(".search [name='keyword']").on("keyup focus", function () {
+//            fouce = true;
+//            var keyword = $(this).val();
+//            if (keyword.length > 2)
+//            {
+//                $.post(search_related_url, {keyword: keyword}, function (data) {
+//                    if (data)
+//                    {
+//                        $(".search_associated").width($(".search [name='keyword']").outerWidth() - 2).show();
+//                        $(".search_associated ul").html(data);
+//                    }
+//                })
+//            }
+//            else
+//            {
+//                $(".search_associated").hide();
+//            }
+//        })
+    </script>
+
+
+    <script>
+        var page=2;//页数
+        $('.load_more').click(function(){
+            new_box_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: false});
+            $.ajax({
+                url: "/support/moreticket",
+                type: 'POST',
+                dataType: 'json',
+                data:{'page':page},
+                success: function(ajaxdata){
+                    layer.close(new_box_index);
+                    if(ajaxdata.ap_str){
+                        $("#list_table").append(ajaxdata.ap_str);
+                        page++;
+                    }else{
+                        layer.alert("<?=\YII::t('common','NoMore')?>", {title: false, btn: "", shadeClose: true, shade:false, offset: "auto", time: 2000});
+                    }
+                }
+            });
+        })
+
+        $(".search_box [name='game_id']").on("change", function () {
+            var game_name = $(this).find("option:selected").text();
+            $(this).next(".text").text(game_name);
+        });
+    </script>

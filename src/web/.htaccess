@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+
+# 禁止直接访问index.php
+#RewriteRule ^index.php.*$ / [R,NC,L]
+
+# 绑定账户及权限
+#RewriteCond %{HTTP_HOST} ^webmn.*$
+#RewriteRule ^index.php$ index-web_manage.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{HTTP_HOST} ^webmn.*$
+RewriteRule . index.php [L]
+
+
+</IfModule>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="<?=__CSS__?>/ct-style.css" />
+</head>
+<body>
+<div class="title"><?=\YII::t('common','Payment Password-Reset')?></div>
+<form action="#" method="post" accept-charset="utf-8" class="change_form" onsubmit="return false">
+    <div class="con">
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" class="input" name="old_pwd" placeholder="<?=\YII::t('common','Your Payment Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" class="input" name="new_pwd1" placeholder="<?=\YII::t('common','New Payment Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <div class="list clearboth">
+            <span class="fl name"></span>
+            <div class="fr">
+                <input type="password" class="input" name="new_pwd2" placeholder="<?=\YII::t('common','Confirm Payment Password')?>">
+                <div class="error"></div>
+            </div>
+        </div>
+        <button class="but submit_btn"><?=\YII::t('common','Confirm')?></button>
+        <a href="/wallet/get-paypwd?token=<?=$_GET['token']?>" class="ps"><?=\YII::t('common','Forgot Payment Password')?></a>
+    </div>
+    <input type="hidden" value="<?=isset($_GET['token'])?$_GET['token']:'';?>" name="token" class="token"/>
+</form>
+</body>
+</html>
+<script type="text/javascript" src="<?=__JS__?>/jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        $('.submit_btn').click(function () {
+            var old_pwd = $('.old_pwd').val();
+            var new_pwd1 = $('.new_pwd1').val();
+            var new_pwd2 = $('.new_pwd2').val();
+            var token = $('.token').val();
+
+            if(old_pwd === ''){
+                alert('input old password,Please.');
+                return false;
+            }
+
+            if(new_pwd1 === '' || new_pwd2 === ''){
+                alert('input password,Please.');
+                return false;
+            }
+
+            if(token === ''){
+                alert('params error');
+                return false;
+            }
+            $.ajax({
+                type : 'post',
+                url : '/ct-ucenter/change-paypwd',
+                dataType : 'json',
+                data : $('.change_form').serialize(),
+                success : function (data) {
+                    if(data.code == 0){
+                        alert('Success');
+                        //location.reload();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+    })
+</script>

@@ -1,0 +1,206 @@
+<?php $this->beginContent('@module/views/'.GULP.'/public/main.html');?>
+<?php if($this->params['is_login']){?>
+<script type="text/javascript">
+    var upload_portra_url = "/usercenter/uploadportrait";
+    var crop_portra_url = "/usercenter/cropportrait";
+    var save_portra_url = "/usercenter/ajaxsaveportrait";
+    var domain = "<?php echo $_SERVER['HTTP_HOST'];?>";
+</script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/jquery.Jcrop.js"></script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript" src="<?=__STATIC__?>/jcrop/js/avatarCutter.js"></script>
+<style>
+    .avatar_warp{
+        width:430px;
+        height:430px;
+        background: #456d9e;
+    }
+    #avatar_box{overflow: hidden;}
+</style>
+<?php } ?>
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/user.css">
+<script type="text/javascript" src="<?=__JS__?>/common.js"></script>
+<script type="text/javascript" src="<?=__JS__?>/jquery.validate.min.js"></script>
+<div class="content sub_main" style="margin-top: 0;">
+    <div class="user_main_box">
+        <div class="sub_content" style="color: #000000;">
+            <div class="user_index">
+                <div class="personal_data">
+                    <div class="data">
+                        <div class="img">
+                            <img src="<?=$this->params['user_info']['avatar'] ?: '/Public/src/Common/images/UserAvatar/avatar01_20160305.jpg' ;?>" alt="" width="160" height="160"><a href="#"><i class="icon iconfont"></i><?=\YII::t('common','UpdatePicture')?></a></div>
+                        <div class="text">
+                            <h2><?=$this->params['user_info']['username'] ?></h2>
+                            <h3 class="email" title="<?=$this->params['user_info']['email'] ?>"><?=$this->params['user_info']['email'] ?></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="user_con">
+                    <div class="user_con_hd">
+                        <ul>
+                            <?php foreach($this->params['user_menu'] as $menu){?>
+                            <li <?php if($menu['active'] == 'on'){?> class="on" <?php } ?>><a href="<?=$menu['url']?>"><?=$menu['name']?></a></li>
+                            <?php }?>
+                        </ul>
+                    </div>
+                    <!--body-->
+                        <?= $content ?>
+                    <!--\body-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--上传头像弹出框-->
+<?php if($this->params['is_login']){?>
+    <div class="avater_box" style="display:none;">
+        <div class="avater_con">
+            <div class="upload" id="avater_upload">
+                <h2 class="avater_title"><?=Yii::t('common','UploadPhoto')?></h2>
+                <div class="box">
+                    <input name="portrait_file" type="file" class="file" id="portrait_file">
+                    <font><?=Yii::t('common','Upload')?></font>
+                    <!--<span><?=Yii::t('common','SupportsImg')?></span>-->
+                </div>
+            </div>
+            <div class="adjustment" id="div_avatar" style="display: none;">
+                <h2 class="avater_title"><?=Yii::t('common','CropPhoto')?></h2>
+                <div class="box">
+                    <div class="avatar_warp">
+                        <div class="face" id="avatar_box"><img src="" id="target"></div>
+                    </div>
+                    <div class="face_sub">
+                        <a class="sub" id="btnCrop" href="#"><?=Yii::t('common','CropSave')?></a>
+                        <a class="sub sub02" id="btnChoose" href="#"><?=Yii::t('common','Change')?></a>
+                    </div>
+                    <input type="hidden" id="x1" name="x1" value="0" />
+                    <input type="hidden" id="y1" name="y1" value="0" />
+                    <input type="hidden" id="cw" name="cw" value="0" />
+                    <input type="hidden" id="ch" name="ch" value="0" />
+                    <input type="hidden" id="imgsrc" name="imgsrc" />
+                </div>
+            </div>
+
+            <div class="preview">
+                <div class="b_preview"><div id="picture_100"><img  <?php if($this->params['user_info']['avatar_url']){?> src="<?=$this->params['user_info']['avatar_url']?>" <?php }else{ ?> src="<?=__AVATARS__?>/avatar_default_20160305.jpg" <?php } ?> width="100" height="100"></div><p>100x100</p></div>
+                <div class="s_preview"><div id="picture_50"><img <?php if($this->params['user_info']['avatar_url']){?> src="<?=$this->params['user_info']['avatar_url']?>" <?php }else{ ?> src="<?=__AVATARS__?>/avatar_default_20160305.jpg" <?php } ?> width="50" height="50"></div><p>50x50</p></div>
+            </div>
+
+<style>
+    #avater_list{
+        height: 212px;
+        overflow-y: scroll;
+        width: 543px;
+    }
+    .miaobao span{
+        padding: 0px 10px;
+        border: 1px solid #0f4979;
+        height: 30px;
+        display: inline-block;
+        line-height: 30px;
+        color: #fff;
+        font-size: 14px;
+    }
+    .miaobao{
+        margin-bottom: 10px;
+    }
+    .miaobao .active{
+        background: #2c95c9;
+    }
+    #avater_list::-webkit-scrollbar {
+        width: 12px;
+        background-color:#213151;
+    }
+    #avater_list::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #38c0fe;
+    }
+    #avater_list::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #547eac;
+    }
+    .titInfo .list{display: none}
+</style>
+
+            <script>
+                $(document).ready(function(e) {
+                    $(".miaobao span").click(function(){
+                        $(".miaobao span").eq($(this).index()).addClass("active").siblings().removeClass("active");
+                        $(".titInfo .list").hide().eq($(this).index()).show();
+                    });
+                });
+            </script>
+            <div class="bring_face">
+                <h2 class="avater_title"><?=Yii::t('common','selectBelow')?></h2>
+                <div class="miaobao">
+                    <span class="active">ALL</span>
+                    <span>LIBERATORS</span>
+                    <span>BATTLESPACE</span>
+                </div>
+                <div class="titInfo">
+                    <div class="list" id="avater_list" style="display:block">
+                    <ul>
+                        <li><img src="<?=__AVATARS__?>/avatar01_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar02_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar03_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar04_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar05_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar06_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar07_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar08_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar09_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/avatar10_20160305.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/11.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/12.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/13.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/14.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/15.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/16.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/17.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/18.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/19.jpg"></li>
+                        <li><img src="<?=__AVATARS__?>/20.jpg"></li>
+                    </ul>
+                </div>
+                    <div class="list" >
+                        <ul>
+                            <li><img src="<?=__AVATARS__?>/avatar01_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar02_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar03_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar04_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar05_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar06_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar07_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar08_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar09_20160305.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/avatar10_20160305.jpg"></li>
+                        </ul>
+                    </div>
+                    <div class="list">
+                        <ul>
+                            <li><img src="<?=__AVATARS__?>/11.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/12.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/13.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/14.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/15.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/16.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/17.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/18.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/19.jpg"></li>
+                            <li><img src="<?=__AVATARS__?>/20.jpg"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="avatar_sub">
+                    <a href="#" class="sub" id="default_avater_save"><?=Yii::t('common','Save')?></a>
+                    <a href="javascript:layer.closeAll();" class="sub sub02"><?=Yii::t('common','Cancel')?></a>
+                </div>
+            </div>
+        </div>
+        <div class="user_c"><a href="javascript:layer.closeAll()" class="close">+</a></div>
+    </div>
+<?php } ?>
+
+<?php $this->endContent();?>

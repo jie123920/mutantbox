@@ -1,0 +1,138 @@
+<!-- 主体 -->
+<div class="service_main">
+    <div class="search_box" style="margin-bottom: 50px;">
+        <div class="select">
+            <select name="game_id">
+                <?php foreach($game_list as $vo){?>
+                <?php 
+                $select_str = '';
+                if($game_id == $vo['id']) { 
+                    $checked_game_name = $vo['game_name'];
+                    $select_str = 'selected=selected';
+                }
+                ?>
+                <option value="<?=$vo['id']?>" <?=$select_str; ?>><?=$vo['game_name']?></option>
+                <?php }?>
+            </select>
+            <div class="text"><?=$checked_game_name?></div>
+        </div>
+        <div class="search">
+            <input type="text" class="input_text" name="keyword">
+            <a class="search_btn"  href="javascript:void(0);"><?=\YII::t('common','search')?></a>
+
+            <div class='search_associated' style="display: none;">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        var fouce = false;
+        search_related_url = "/support/searchrelated";
+        $(".search .search_btn").on("click", function () {
+            var keyword = $(".search [name='keyword']").val();
+            var game_id = $(".select [name='game_id']").find('option:selected').val();
+            if(!keyword){
+                layer.alert('<?=\YII::t('common','EmptyKeywords')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000})
+                return false;
+            }
+            location.href = "/faq/faqlist?game_id=" + game_id + "&keyword=" + keyword;
+        })
+
+        $(function(){
+            $(document).keydown(function(event){
+                if(event.keyCode==13&&fouce){
+                    var keyword = $(".search [name='keyword']").val();
+                    var game_id = $(".select [name='game_id']").find('option:selected').val();
+                    if(!keyword){
+                        layer.alert('<?=\YII::t('common','EmptyKeywords')?>', {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+                        return false;
+                    }
+                    location.href = "/faq/faqlist?game_id=" + game_id + "&keyword=" + keyword
+                }
+            });
+        });
+        $(".search [name='keyword']").on("keyup focus", function () {
+            fouce = true;
+            var keyword = $(this).val();
+            var game_id = $(".select [name='game_id']").find('option:selected').val();
+            if (keyword.length > 2)
+            {
+                $.post(search_related_url, {game_id: game_id, keyword: keyword}, function (data) {
+                    if (data)
+                    {
+                        $(".search_associated").width($(".search [name='keyword']").outerWidth() - 2).show();
+                        $(".search_associated ul").html(data);
+                    }
+                })
+            }
+            else
+            {
+                $(".search_associated").hide();
+            }
+        })
+    </script>
+<link rel="stylesheet" type="text/css" href="<?=__CSS__?>/service.css">
+    <div class="service_con service_index_con">
+        <div class="service_in_box">
+            <div class="service_list">
+                <ul class="clearfix">
+                    <?php $i=1;?>
+                    <?php foreach($faq_list as $vo){?>
+                        <li <?php if($i==2){echo 'class="on"';}?> ><div><i class="icon iconfont3"></i><h3><?=$vo['name']?></h3></div></li>
+                        <?php $i++;?>
+                    <?php } ?>
+                </ul>
+            </div>
+            <div class="sercice_cont">
+                <?php $i=1;?>
+                <?php foreach($faq_list as $vo){?>
+                    <div <?php if($i==2){echo 'class="on"';}?> >
+                    <?php foreach($vo['article'] as $article){?>
+                        <p><a href="/faq/details?id=<?=$article['id']?>"><?=$article['title']?></a></p>
+                    <?php } ?>
+                    <div class="service_in_more"><a href="/faq/faqlist?id=<?=$vo['id']?>"><?=\YII::t('common','MoreArticles')?></a></div>
+                    </div>
+                <?php $i++;?>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+    <div class="edit">
+        <p><?=\YII::t('common','foundSolution')?><a href="javascript:void(0);" id="checkLog"><?=\YII::t('common','Contact')?></a> <?=\YII::t('common','directly')?>.</p>
+    </div>
+
+    <script>
+        var ckeckLogUrl = "/support/ticketcheck";
+        var ticketUrl = "/support/ticket?game_id=<?=$game_id;?>";
+        $("#checkLog").on("click", function () {
+            $.post(ckeckLogUrl, function (data) {
+                if (data.error == 0)
+                {
+                    location.href = ticketUrl;
+                }
+                else
+                {
+                    dialog('.login', ticketUrl, true, 1);
+                }
+            })
+        });
+
+
+        $(".search_box [name='game_id']").on("change", function () {
+            var game_name = $(this).find("option:selected").text();
+            $(this).next(".text").text(game_name);
+            window.location="/support/index?game_id=" + this.value;
+        })
+
+    </script>
+
+    <script>
+        $('.service_list li').on('click',function(){
+            $(this).addClass('on').siblings().removeClass('on');
+            $('.sercice_cont>div').eq($(this).index()).addClass('on').siblings().removeClass('on');
+        })
+    </script>
+</div>
+<!-- /主体 -->

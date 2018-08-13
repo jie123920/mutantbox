@@ -1,0 +1,166 @@
+    <link rel="stylesheet" href="<?=__CSS__?>/bootstrap-datepicker.standalone.css" />
+        <div class="user_con_bd_box">
+            <div class="user_con_bd">
+                <div class="general">
+                    <form action="<?=__SELF__?>" method="post" class="save_user_form">
+                        <dl>
+                            <dt><?=\YII::t('common','DisplayName')?></dt>
+                            <dd><input name="username" type="text" value="<?=$this->params['user_info']['username']?>" class="user_input_text"></dd>
+                            <dt><?=\YII::t('common','Email')?></dt>
+                            <dd class="email">
+                                <input name="email" type="text" value="<?=$this->params['user_info']['email']?>" class="user_input_text" disabled="disabled">
+                            </dd>
+                            <dt><?=\YII::t('common','Gender')?></dt>
+                            <dd class="user_radio">
+                                <label><input name="gender" type="radio" value="1" <?php if($this->params['user_info']['gender']==1){?> checked="checked" <?php } ?>><span><?=\YII::t('common','Male')?></span></label>
+                                <label><input name="gender" type="radio" value="2" <?php if($this->params['user_info']['gender']==2){?> checked="checked" <?php } ?>><span><?=\YII::t('common','Female')?></span></label>
+                            </dd>
+                            <dt><?=\YII::t('common','Birth')?></dt>
+                            <dd class="user_date"><input name="birth_data" type="text" <?php if($this->params['user_info']['birth_data']){?> value="<?=date("Y-m-d",$this->params['user_info']['birth_data'])?>" <?php }else{ ?> value="1990-01-01" <?php } ?> class="user_input_text  date-picker" id="date-picker-1" data-date-format="yyyy-mm-dd" ></dd>
+                            <dt><?=\YII::t('common','Location')?></dt>
+                            <dd class="user_select">
+                                <select name="region_id"  id="region-select">
+                                    <?php foreach($region_list as $region){?>
+                                    <option value="<?=$region['id']?>" <?php if($this->params['user_info']['country']==$region['id']){?> selected="selected" <?php } ?> ><?=$region['region_name']?></option>
+                                    <?php } ?>
+                                </select>
+                            </dd>
+                            <dt><?=\YII::t('common','Tel')?></dt>
+                            <dd style="position: relative;"><span id="region_code" style="padding:8px; position: absolute; line-height: 18px;font-size: 16px;">+<?=isset($this->params['user_info']['area_code'])?$this->params['user_info']['area_code'] : '';?></span><input name="mobile"  value="<?=$this->params['user_info']['mobile']?>"  type="text" class="user_input_text"></dd>
+                            <dt><?=\YII::t('common','Skype')?></dt>
+                            <dd><input name="skype" type="text"  value="<?=$this->params['user_info']['skype']?>" class="user_input_text"></dd>
+                            <dt class="hong">&nbsp;</dt>
+                        </dl>
+                        <div class="user_sub">
+                            <input type="hidden" name="id" value="<?=$this->params['user_info']['id']?>">
+                            <input name="" type="submit" value="<?=\YII::t('common','Save')?>" class="user_input_sub">
+                            <input name="" type="reset" value="<?=\YII::t('common','Cancel')?>" class="user_input_sub user_input_sub02">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <script src="<?=__JS__?>/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".save_user_form input[name='mobile']").css("paddingLeft", parseInt($("#region_code").outerWidth()) + 4);
+            var end_time = "{$max_age}";
+            var date_picker1 = $('#date-picker-1').datepicker({
+                defaultViewDate: {year: 1990, month: 01, day: 01},
+                autoclose: true,
+                endDate: new Date(end_time),
+                todayHighlight: true,
+                orientation: "bottom"
+            })
+
+            $(".save_user_form").validate({
+                errorClass: "red_error",
+                highlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass);
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parent());
+                },
+                rules: {
+                    username: {
+                        required: true,
+                        rangelength: [2, 20]
+                    },
+//                    email: {
+//                        required: true,
+//                        email: true,
+//                        remote: {
+//                            url: "/usercenter/ajaxcheckedemail",
+//                            type: "post",
+//                            dataType: "json"
+//                        }
+//                    },
+                    password: {
+                        required: true,
+                        rangelength: [6, 20]
+                    },
+                    mobile: {
+                        digits: true
+                    }
+                },
+                messages: {
+                    email: {
+                        remote: "Email already exists."
+                    },
+                    mobile: {
+                        digits: "Invalid mobile phone number."
+                    }
+                },
+                submitHandler: function (form)
+                {
+                    saveUser_index = layer.msg('<?=\YII::t('common','Loading')?>', {icon: 16, time: 0, shadeClose: true, shade: [0.7, '#000']});
+                    $(form).ajaxSubmit({
+                        success: saveUserResponse
+                    });
+                }
+            });
+            function saveUserResponse(result)
+            {
+                layer.close(saveUser_index);
+                layer.alert(result.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+            }
+
+            $("#region-select").change(function () {
+                var region_id = $(this).val();
+                $.post("/usercenter/ajaxregioncode", {region_id: region_id}, function (data) {
+                    $("#region_code").html("+" + data.area_code);
+                    $(".save_user_form input[name='mobile']").css("paddingLeft", parseInt($("#region_code").innerWidth()) + 4);
+                })
+            })
+
+            $("#email_verified").click(function () {
+                if (!$(this).hasClass("disabled"))
+                {
+                    var email = $(".save_user_form input[name='email']").val();
+                    verify_email_time("#email_verified");
+                    $.post("/usercenter/bindemail", {email: email}, function (data) {
+                        if (data.error != 2)
+                        {
+                            if (data.error == 0)
+                            {
+                                //verify_email_time("#email_verified");
+                            }
+                            layer.alert(data.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+                        }
+                        else
+                        {
+                            var bind_email_index = layer.confirm(data.msg, {
+                                title: false,
+                                shadeClose: true,
+                                shade: [0.7, '#000'],
+                                btn: ['Confirm', 'Cancel'] //按钮
+                            }, function () {
+                                $.post("/usercenter/ajaxsaveemail", {email: email}, function (data) {
+                                    layer.alert(data.msg, {title: false, btn: "", shadeClose: true, shade: [0.7, '#000'], offset: "auto", time: 2000});
+                                })
+                            }, function () {
+                                //取消
+                            });
+                        }
+                    })
+                }
+            })
+
+            var wait = 60;
+            function verify_email_time(o) {
+                if (wait == 0) {
+                    $(o).removeClass("disabled");
+                    $(o).html("Resend");
+                    wait = 60;
+                } else {
+                    $(o).addClass("disabled");
+                    $(o).html("<br /> If you do not receive a confirmation email, try again in " + wait + " secs.");
+                    wait--;
+                    setTimeout(function () {
+                        verify_email_time(o)
+                    }, 1000)
+                }
+            }
+        });
+    </script>

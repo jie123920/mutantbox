@@ -1,0 +1,49 @@
+@charset "utf-8";
+/* CSS Document */
+
+.navbar-inverse .navbar-brand{ background-position-y:center}
+.container{ width:1500px;}
+.navbar .container{ width:1500px;}
+.navbar .last{ width:160px;}
+.last .pos{ width:60px; position:absolute; right:0px; top:25px;}
+.nav input{ border:1px solid #616161; height:30px; line-height:30px; margin:25px 5px 0; width:120px;}
+.nav .pop{width:250px; top:55px; *top:58px; *left:12px; *width:232px; }
+#navbar .nav .last a{  padding:25px 0; }
+
+
+.nav > li > a{ padding:30px;}
+.navbar-brand{ padding:0 15px; }
+.navbar-header {
+    float: left;
+}
+.navbar-toggle{ display:none;}
+.collapse { display:block;}
+.nav li{ float:left;}
+.service_list{ width:500px; *width:420px;}
+.col-md-4.item{ width:500px; float:left;}
+.news{ padding-top:0px; padding-bottom:0; width:1000px; *width:820px; float:right;}
+.news ul{ margin-top:50px;}
+#facebook{ width:500px; height:417px; float:left; }
+#slid1{ width:1000px; float:right; }
+#lists div.item{ width:750px; float:left;}
+
+.owl-carousel{ width:1500px; *width:1300px;}
+
+#company{ padding:50px; width:1500px; *width:1400px; }
+#company .col-sm-5{ width:40%; float:left;}
+#company .col-sm-2{ width:20%; float:left; height:150px;}
+#company .col-sm-4{ width:30%; float:right;}
+
+#video{ height:640px;}
+#video .col-sm-10{ width:1200px; margin:0 auto; float:none;}
+
+#footer .logo{ width: 171px; height:60px; float:left; position:static}
+#footer .rights{ width:1250px; float:right; position:static}
+#footer .rights div{  position:static}
+#footer .rights .row div{ float:left; margin-right:15px;}
+
+.owl-buttons{ width:1500px; *width:1440px;}
+
+.inp input{ width:50%; vertical-align:middle;}
+
+.pos ul{ *width:52px;}

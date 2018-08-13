@@ -1,0 +1,86 @@
+
+<style type="text/css">
+    .news_detail dd .input_s {
+    width: 349px;
+    height: 37px;
+    background: transparent url('<?=__IMG__?>/needs1.png') no-repeat;
+    border: 5px none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+    margin-right: 8%;
+    margin-left: 60%;
+    display: inline-block;
+    margin-bottom: -10px;
+}.news_detail dd .input_s02 {
+    width: 349px;
+    height: 37px;
+    background: transparent url('<?=__IMG__?>/needs2.png') no-repeat 0 -37px;
+    border: 5px none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+    margin-right: 8%;
+    margin-left: 60%;
+    display: inline-block;
+    margin-bottom: -10px;
+}
+</style>
+
+    <div class="content sub_main">
+        <div class="sub_main_box">
+            <div class="sub_content" style="margin-top:0;">
+                <div class="news_detail">
+                    <div class="position"><a href="/index/index">Home</a>
+                        <?php foreach($arrPids as $v){?>
+                            -> <a href="###"><?=$v['name']?></a>
+                        <?php }?>
+                        <font><?=$article['title']?></font></div>
+                    <div class="detail_box">
+                        <div class="title">
+                            <h2><?=$article['title']?></h2>
+                            <p><?=date("Y m d",$article['create_time'])?> [GMT]</p>
+                        </div>
+                        <div class="edit"><?=htmlspecialchars_decode($article['remark'])?></div>
+                    </div>
+                            <dd class="clearfix sub_input" style="margin-top:10px; text-align:center">
+                                <input style="display:none;margin:auto" name="" type="button"  value="<?=\YII::t('common','articleHelp')?>" class="input_s02" onClick="location.href='/support/ticket'">
+                                <input style="margin:auto" name="" type="button" value="<?=\YII::t('common','articleHelp')?>" class="input_s" onClick="location.href='/support/ticket'">
+                            </dd>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".input_s").mouseenter(function(){
+            $(".input_s02").show();
+            $(".input_s").hide();
+        });
+        $(".input_s02").mouseleave(function(){
+            $(".input_s").show();
+            $(".input_s02").hide();
+        });
+    </script>
+    <script>
+        jQuery(".slideBox").slide({mainCell: ".bd ul", effect: "fold", autoPlay: true, interTime: 4000});
+        TouchSlide({slideCell: "#focus", titCell: ".hd ul", mainCell: ".bd ul", effect: "leftLoop", autoPlay: true, autoPage: true, interTime: 4000});
+        function fangfa() {
+            var bodyw = $(window).width();
+            var bodyw = $('body').width();
+            if (bodyw > 960) {
+                $('.pc_banner .bd ul,.pc_banner .bd li').width(bodyw)
+                var imgh = $('.pc_banner .bd li img').height();
+                $('.pc_banner .bd ul').height(imgh)
+            }
+        }
+        window.onload = function () {
+            fangfa()
+        };
+        $(window).resize(function () {
+            fangfa()
+        });
+
+    </script>

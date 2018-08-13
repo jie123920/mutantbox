@@ -1,0 +1,22 @@
+<body class="sur-newswrap">
+<div class="sur-newsinfo">
+	<ul class="sur-newsbox">
+		<li>
+			<h2><a href=""><?=$article['title']?></a></h2>
+			<div class="sur-newstime"><time><?=date('M d, Y',$article['create_time'])?> [GMT]</time><span><?=$article['name']?></span></div>
+			<div class="sur-contwrap">
+				<div class="sur-newsarticle">
+					<p><?=htmlspecialchars_decode($article['message'])?>
+					</p>
+				</div>
+				<div class="sur-newsshare">
+					<span><?=\YII::t('common','share')?>:</span>
+					<a href="javascript:void(window.open('http://www.facebook.com/sharer.php?u=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'&t='.$article['title']?>'),'Share','width=600,height=400')"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+					<a href="javascript:void(window.open('http://reddit.com/r/gaming/submit?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'&title='.$article['title']?>'),'Share','width=600,height=400')"><i class="fa fa-reddit-alien" aria-hidden="true"></i></a>
+					<a href="javascript:void(window.open('https://twitter.com/intent/tweet?url=<?=PROTOCOL.'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'&text='.$article['title']?>'),'Share','width=600,height=400')"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+</body>
