@@ -1,0 +1,47 @@
+﻿# phpstorm project files
+.idea
+.idea/R*
+.idea/*
+
+
+# netbeans project files
+nbproject
+
+# zend studio for eclipse project files
+.buildpath
+.project
+.settings
+
+# windows thumbnail cache
+Thumbs.db
+
+# composer vendor dir
+/vendor
+# cubrid install dir
+/cubrid
+
+# composer itself is not needed
+composer.phar
+
+# composer.lock in applications is ignored since it's automatically created by composer when application is installed
+composer.lock
+
+# Mac DS_Store Files
+.DS_Store
+
+# phpunit itself is not needed
+phpunit.phar
+# local phpunit config
+/phpunit.xml
+/src/Uploads*
+/src/Application/R*
+src/login-test.html
+src/login-test.php
+# src/Application/Home/Controller/UcenterController.class - 副本.php
+/src/Application/Home/Lang/*.php
+/src/Application/Games/Lang/*.php
+/src/composer.json
+src/web/CopyOf*
+src/modules/cf/controllers/CopyOf*
+src/modules/shop/controllers/Test*
+src/modules/cf/controllers/Test*
